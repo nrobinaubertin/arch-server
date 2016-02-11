@@ -1,27 +1,29 @@
 #PACKAGES
-for x in $(cat HOME/package_list.txt); do sudo pacman --noconfirm -S $x; done
+for x in $(cat package_list.txt); do sudo pacman --noconfirm -S $x; done
 
 #VIDEO CARD DRIVERS
-sudo pacman -S --noconfirm xf86-video-ati xf86-video-intel xf86-video-nouveau
+#sudo pacman -S --noconfirm xf86-video-ati xf86-video-intel xf86-video-nouveau
 
-#HOME
-cat HOME/.xinitrc > ~/.xinitrc
-cat HOME/.bashrc > ~/.bashrc
-cat HOME/.Xresources > ~/.Xresources
-cat HOME/.vimrc > ~/.vimrc
-cat HOME/.tmux.conf > ~/.tmux.conf
-
-#CONF FILES
-sudo cp ETC/httpd/httpd.conf /etc/httpd/conf/httpd.conf
-sudo cp ETC/php/php.ini /etc/php/php.ini
+#DWM
+#cd dwm
+#sudo make clean install
+#cd ../
 
 #YAOURT
-chmod u+x install_yaourt.sh
-~/bin/install_yaourt.sh
+./install_yaourt.sh
 
-#VIM 
-cp -r HOME/.vim ~/.vim
+#AUR
+./install_aur.sh
 
-#php extensions
-sudo pacman -S php-gd php-mcrypt
-yaourt -S php-imagick
+# GENERAL UPDATE
+sudo pacman -Syyu
+
+#PERSONAL
+cp -r -t ~/ HOME/*
+cp -r -t ~/ HOME/.*
+
+#CONF FILES
+#sudo mkdir -p /etc/httpd/conf
+#sudo cp ETC/httpd/httpd.conf /etc/httpd/conf/httpd.conf
+#sudo mkdir -p /etc/php
+#sudo cp ETC/php/php.ini /etc/php/php.ini
