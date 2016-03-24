@@ -1,29 +1,26 @@
-#PACKAGES
+# PACKAGES
 for x in $(cat package_list.txt); do sudo pacman --noconfirm -S $x; done
 
-#VIDEO CARD DRIVERS
-#sudo pacman -S --noconfirm xf86-video-ati xf86-video-intel xf86-video-nouveau
-
-#DWM
-#cd dwm
-#sudo make clean install
-#cd ../
-
-#YAOURT
+# YAOURT
 ./install_yaourt.sh
 
-#AUR
+# AUR
 ./install_aur.sh
 
-# GENERAL UPDATE
-sudo pacman -Syyu
+# OTHER
+./install_other.sh
 
-#PERSONAL
+# GENERAL UPDATE
+yaourt -Syyu --noconfirm
+
+# bin
+cp -r bin ~/bin
+
+# dotFiles
 cp -r -t ~/ HOME/*
 cp -r -t ~/ HOME/.*
 
-#CONF FILES
-#sudo mkdir -p /etc/httpd/conf
-#sudo cp ETC/httpd/httpd.conf /etc/httpd/conf/httpd.conf
-#sudo mkdir -p /etc/php
-#sudo cp ETC/php/php.ini /etc/php/php.ini
+# SERVER
+
+sudo cp -t /etc/php SERVER/php/*
+sudo cp -t /etc/nginx SERVER/nginx/*

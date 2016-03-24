@@ -1,5 +1,5 @@
 aurvote
 freecell
 package-query
-php-imagick
+php-pear
 yaourt
