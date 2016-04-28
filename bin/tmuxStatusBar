@@ -2,7 +2,7 @@
 #vol=$(amixer | sed -n '5p' | cut -d' ' -f6 | sed 's/[^0-9%]//g')
 cpu=$(w | sed -n '1p' | sed 's/^.*average:\ \(.*\),.*,.*/\1/')
 #heat=$(sensors | sed -n 's/[^\ .0-9]//g; s/[\ ]\+/ /g; 3p' | cut -d' ' -f3 | sed 's/^\([0-9][0-9]\).*/\1°C/')
-heat=$(sensors | grep "Core 1" | sed 's/[^\ .0-9]//g; s/[\ ]\+/ /g;' | cut -d' ' -f3 | sed 's/^\([0-9][0-9]\).*/\1/')
+#heat=$(sensors | grep "Core 1" | sed 's/[^\ .0-9]//g; s/[\ ]\+/ /g;' | cut -d' ' -f3 | sed 's/^\([0-9][0-9]\).*/\1/')
 batteryStatus=$(acpi -b | awk 'sub(/,/,"") {print $3, $4}')
 batteryStatus=$( echo $batteryStatus | sed -e "s/,//")
 if [[ -z $batteryStatus ]]
@@ -12,11 +12,11 @@ fi
 currentTime=$(date +"%H:%M:%S")
 if [[ $1 == left ]]
 then
-if [[ $vol != "" ]]
-then
-echo "$vol | "
-fi
-echo "$heat°C | $cpu | $batteryStatus"
+#if [[ $vol != "" ]]
+#then
+#echo "$vol | "
+#fi
+echo "$cpu | $batteryStatus"
 fi
 if [[ $1 == right ]]
 then

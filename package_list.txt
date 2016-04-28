@@ -10,11 +10,13 @@ iftop
 imagemagick
 lm_sensors
 mongodb
+mongodb-tools
 nasm
 ncdu
 neovim
 net-tools
 nginx
+npm
 ntfs-3g
 openssh
 php-fpm

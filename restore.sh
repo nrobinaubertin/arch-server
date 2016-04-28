@@ -10,15 +10,15 @@ for x in $(cat package_list.txt); do sudo pacman --noconfirm -S $x; done
 # OTHER
 ./install_other.sh
 
-# GENERAL UPDATE
+ GENERAL UPDATE
 yaourt -Syyu --noconfirm
 
 # bin
 cp -r bin ~/bin
 
 # dotFiles
-cp -r -t ~/ HOME/*
-cp -r -t ~/ HOME/.*
+#cp -r -t ~/ HOME/*
+#cp -r -t ~/ HOME/.*
 
 # SERVER
 

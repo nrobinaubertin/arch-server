@@ -18,7 +18,8 @@ myuptime=$(awk -F"[, ]" '{ if (NF==17) print $4; else print $4,$5 }' <(uptime))
 myshell=$(ps -p `ps -p $$ -o ppid=` | sed -n '2p' | sed 's/.*\s\(.*\)$/\1/')
 myterm=$(echo $TERM)
 myedit=$(echo ${EDITOR##*/})
-mybrowser=$(echo ${BROWSER##*/})
+#mybrowser=$(echo ${BROWSER##*/})
+myip=$(ip route show | tail -n1 | sed -r 's/.*src(.*)/\1/' | cut -d' ' -f2)
 mymultiplexer=$(echo ${MULTIPLEXER##*/})
 
 
@@ -30,13 +31,13 @@ ${dk}                 +
                #####               ${tx}Kernel:${ec} ${mykernel}${dk}
                ######              ${tx}CPU:${ec} ${mycpu}${dk}
               ; #####;             ${tx}Uptime:${ec} ${myuptime}${dk}
-             +##.#####             
+             +##.#####             ${tx}IP:${ec} ${myip}${dk}
             +##########            
            #############;          ${tx}Shell:${ec} ${myshell^}${dk}
           ###############+         ${tx}Terminal:${ec} ${myterm^}${dk}
          #######   #######         ${tx}Multiplexer:${ec} ${mymultiplexer^}${dk}
        .######;     ;###;\`.        ${tx}Editor:${ec} ${myedit^}${dk} 
-      .#######;     ;#####.        ${tx}Browser:${ec} ${mybrowser^}${dk}
+      .#######;     ;#####.        
       #########.   .########\`
      ######'           '######
     ;####                 ####;
