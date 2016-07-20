@@ -3,8 +3,6 @@ exfat-utils
 fcron
 ffmpeg
 fortune-mod
-freecell
-grub
 htop
 iftop
 imagemagick
@@ -24,8 +22,6 @@ php-gd
 php-mcrypt
 php-mongodb
 php-pear
-pkgstats
-pth
 ranger
 rtorrent
 rxvt-unicode
@@ -35,4 +31,3 @@ tree
 unrar
 unzip
 wget
-yaourt

@@ -1,5 +1,1 @@
-aurvote
-freecell
-package-query
 php-pear
-yaourt
