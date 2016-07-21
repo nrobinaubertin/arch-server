@@ -3,7 +3,6 @@ exfat-utils
 fcron
 ffmpeg
 fortune-mod
-freecell
 grub
 htop
 iftop
@@ -28,6 +27,7 @@ pkgstats
 pth
 ranger
 rtorrent
+ruby
 rxvt-unicode
 tmux
 traceroute

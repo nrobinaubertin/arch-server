@@ -10,7 +10,7 @@ for x in $(cat package_list.txt); do sudo pacman --noconfirm -S $x; done
 # OTHER
 ./install_other.sh
 
- GENERAL UPDATE
+# GENERAL UPDATE
 yaourt -Syyu --noconfirm
 
 # bin
