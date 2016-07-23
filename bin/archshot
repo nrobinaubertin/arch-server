@@ -1,7 +1,6 @@
 #!/bin/bash
-# Copyright (c) 2013 Jason W Ryan
+# Copyright (c) 2016 Niels Robin-Aubertin
 # The MIT License (MIT) http://opensource.org/licenses/MIT
-# Modifications by Niels Robin-Aubertin
 
 # colours
 lt=$'\e[1;36m' # light cyan
@@ -13,14 +12,52 @@ ec=$'\e[0m'
 machine=$(</proc/sys/kernel/hostname)
 arch=$(uname -m)
 mykernel=$(uname -r)
-mycpu=$(awk '/cpu/ {flag=1} /!/ {flag=0} flag && /Intel/ {sub(/\(TM\)/,""); print $5,$6,$7,$8;exit}' /proc/cpuinfo)
-myuptime=$(awk -F"[, ]" '{ if (NF==17) print $4; else print $4,$5 }' <(uptime))
+#mycpu=$(awk '/cpu/ {flag=1} /!/ {flag=0} flag && /Intel/ {sub(/\(TM\)/,""); print $5,$6,$7,$8;exit}' /proc/cpuinfo)
+mycpu=$(grep "model name" /proc/cpuinfo | head -n1 | cut -d':' -f2 | sed -r 's/^\s*//')
+#myuptime=$(awk -F"[, ]" '{ if (NF==17) print $4; else print $4,$5 }' <(uptime))
+myuptime=$(uptime | sed -r 's/^.*up ([^,]+).*$/\1/')
 myshell=$(ps -p `ps -p $$ -o ppid=` | sed -n '2p' | sed 's/.*\s\(.*\)$/\1/')
-myterm=$(echo $TERM)
-myedit=$(echo ${EDITOR##*/})
-#mybrowser=$(echo ${BROWSER##*/})
-myip=$(ip route show | tail -n1 | sed -r 's/.*src(.*)/\1/' | cut -d' ' -f2)
-mymultiplexer=$(echo ${MULTIPLEXER##*/})
+#mymem=$(grep MemTotal /proc/meminfo | sed -r 's/[^0-9]*([0-9]+)/\1/')
+mymem=$(free -h --si | sed -n '2p' | sed -r 's/\s+/ /g' | cut -d' ' -f2)
+
+########
+
+mydev1_data=$(df -h | grep /dev/sd | sed -n "1p" | sed -r 's/\s+/ /g')
+mydev2_data=$(df -h | grep /dev/sd | sed -n "2p" | sed -r 's/\s+/ /g')
+mydev3_data=$(df -h | grep /dev/sd | sed -n "3p" | sed -r 's/\s+/ /g')
+mydev4_data=$(df -h | grep /dev/sd | sed -n "4p" | sed -r 's/\s+/ /g')
+
+mydev1_name=$(echo $mydev1_data | cut -d' ' -f1)
+mydev2_name=$(echo $mydev2_data | cut -d' ' -f1)
+mydev3_name=$(echo $mydev3_data | cut -d' ' -f1)
+mydev4_name=$(echo $mydev4_data | cut -d' ' -f1)
+
+mydev1_avail=$(echo $mydev1_data | cut -d' ' -f2)
+mydev2_avail=$(echo $mydev2_data | cut -d' ' -f2)
+mydev3_avail=$(echo $mydev3_data | cut -d' ' -f2)
+mydev4_avail=$(echo $mydev4_data | cut -d' ' -f2)
+
+mydev1_percent=$(echo $mydev1_data | cut -d' ' -f5)
+mydev2_percent=$(echo $mydev2_data | cut -d' ' -f5)
+mydev3_percent=$(echo $mydev3_data | cut -d' ' -f5)
+mydev4_percent=$(echo $mydev4_data | cut -d' ' -f5)
+
+if [[ $mydev1_name != '' ]]
+then
+	mydev1=$(echo "$mydev1_name $mydev1_avail (used : $mydev1_percent)")
+fi
+if [[ $mydev2_name != '' ]]
+then
+	mydev2=$(echo "$mydev2_name $mydev2_avail (used : $mydev2_percent)")
+fi
+if [[ $mydev3_name != '' ]]
+then
+	mydev3=$(echo "$mydev3_name $mydev3_avail (used : $mydev3_percent)")
+fi
+if [[ $mydev4_name != '' ]]
+then
+	mydev4=$(echo "$mydev4_name $mydev4_avail (used : $mydev4_percent)")
+fi
 
 
 # ASCII goodness…
@@ -30,15 +67,15 @@ ${dk}                 +
                 ###                ${tx}Architecture:${ec} ${arch}${dk}
                #####               ${tx}Kernel:${ec} ${mykernel}${dk}
                ######              ${tx}CPU:${ec} ${mycpu}${dk}
-              ; #####;             ${tx}Uptime:${ec} ${myuptime}${dk}
-             +##.#####             ${tx}IP:${ec} ${myip}${dk}
-            +##########            
-           #############;          ${tx}Shell:${ec} ${myshell^}${dk}
-          ###############+         ${tx}Terminal:${ec} ${myterm^}${dk}
-         #######   #######         ${tx}Multiplexer:${ec} ${mymultiplexer^}${dk}
-       .######;     ;###;\`.        ${tx}Editor:${ec} ${myedit^}${dk} 
-      .#######;     ;#####.        
-      #########.   .########\`
+              ; #####;             ${tx}Memory:${ec} ${mymem^}${dk}
+             +##.#####             ${tx}Uptime:${ec} ${myuptime}${dk}
+            +##########            ${tx}Shell:${ec} ${myshell^}${dk}
+           #############;          
+          ###############+         ${tx}Storage:${ec}${dk}
+         #######   #######         ${ec}${mydev1}${dk}
+       .######;     ;###;\`.        ${ec}${mydev2}${dk}
+      .#######;     ;#####.        ${ec}${mydev3}${dk}
+      #########.   .########\`     ${ec}${mydev4}${dk}
      ######'           '######
     ;####                 ####;
     ##'                     '##
