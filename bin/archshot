@@ -12,20 +12,43 @@ ec=$'\e[0m'
 machine=$(</proc/sys/kernel/hostname)
 arch=$(uname -m)
 mykernel=$(uname -r)
-#mycpu=$(awk '/cpu/ {flag=1} /!/ {flag=0} flag && /Intel/ {sub(/\(TM\)/,""); print $5,$6,$7,$8;exit}' /proc/cpuinfo)
-mycpu=$(grep "model name" /proc/cpuinfo | head -n1 | cut -d':' -f2 | sed -r 's/^\s*//')
-#myuptime=$(awk -F"[, ]" '{ if (NF==17) print $4; else print $4,$5 }' <(uptime))
-myuptime=$(uptime | sed -r 's/^.*up ([^,]+).*$/\1/')
-myshell=$(ps -p `ps -p $$ -o ppid=` | sed -n '2p' | sed 's/.*\s\(.*\)$/\1/')
-#mymem=$(grep MemTotal /proc/meminfo | sed -r 's/[^0-9]*([0-9]+)/\1/')
+mycpu=$(grep -m1 "model name" /proc/cpuinfo | cut -d':' -f2 | sed -r 's/(Intel\(R\)|CPU|@|\s+)/ /g' | sed -r 's/\s+/ /g' | sed -r 's/^\s+//')
+myshell=$(ps -p `ps -p $$ -o ppid=` | sed -n '2p' | sed -r 's/.*\s(.*)$/\1/')
 mymem=$(free -h --si | sed -n '2p' | sed -r 's/\s+/ /g' | cut -d' ' -f2)
+myip=$(ip route show | tail -n1 | sed -r 's/.*src(.*)/\1/' | cut -d' ' -f2)
+mypackages=$(pacman -Qet | wc -l)
+
+# get uptime
+ups=$(cat /proc/uptime | cut -d. -f1)
+upm=$(( $ups / 60 ))
+uph=$(( $upm / 60 ))
+upd=$(( $uph / 24 ))
+if [ "$upm" != 0 ]; then ups=$(( $ups - $upm*60 )); fi
+if [ "$uph" != 0 ]; then upm=$(( $upm - $uph*60 )); fi
+if [ "$upd" != 0 ]; then uph=$(( $uph - $upd*24 )); fi
+if [ "$ups" -lt 10 ]; then ups=$( echo "0$ups"); fi
+if [ "$upm" -lt 10 ]; then upm=$( echo "0$upm"); fi
+#if [ "$uph" -lt 10 ]; then uph=$( echo "0$uph"); fi
+
+if [ "$upd" != 0 ]
+then
+	if [ "$upd" < 10 ]
+	then
+		myuptime=$(echo "$upd day, $uph:$upm:$ups")
+	else
+		myuptime=$(echo "$upd days, $uph:$upm:$ups")
+	fi
+else
+	myuptime=$(echo "$uph:$upm:$ups")
+fi
+
 
 ########
 
-mydev1_data=$(df -h | grep /dev/sd | sed -n "1p" | sed -r 's/\s+/ /g')
-mydev2_data=$(df -h | grep /dev/sd | sed -n "2p" | sed -r 's/\s+/ /g')
-mydev3_data=$(df -h | grep /dev/sd | sed -n "3p" | sed -r 's/\s+/ /g')
-mydev4_data=$(df -h | grep /dev/sd | sed -n "4p" | sed -r 's/\s+/ /g')
+mydev1_data=$(df -h | grep -E "^/dev/" | sed -n "1p" | sed -r 's/\s+/ /g')
+mydev2_data=$(df -h | grep -E "^/dev/" | sed -n "2p" | sed -r 's/\s+/ /g')
+mydev3_data=$(df -h | grep -E "^/dev/" | sed -n "3p" | sed -r 's/\s+/ /g')
+mydev4_data=$(df -h | grep -E "^/dev/" | sed -n "4p" | sed -r 's/\s+/ /g')
 
 mydev1_name=$(echo $mydev1_data | cut -d' ' -f1)
 mydev2_name=$(echo $mydev2_data | cut -d' ' -f1)
@@ -44,42 +67,68 @@ mydev4_percent=$(echo $mydev4_data | cut -d' ' -f5)
 
 if [[ $mydev1_name != '' ]]
 then
-	mydev1=$(echo "$mydev1_name $mydev1_avail (used : $mydev1_percent)")
+	#mydev1=$(echo "$mydev1_name \t$mydev1_avail \t(used : $mydev1_percent)")
+	mydev1=$(echo "$mydev1_name $mydev1_avail")
 fi
 if [[ $mydev2_name != '' ]]
 then
-	mydev2=$(echo "$mydev2_name $mydev2_avail (used : $mydev2_percent)")
+	#mydev2=$(echo "$mydev2_name \t$mydev2_avail \t(used : $mydev2_percent)")
+	mydev2=$(echo "$mydev2_name $mydev2_avail")
 fi
 if [[ $mydev3_name != '' ]]
 then
-	mydev3=$(echo "$mydev3_name $mydev3_avail (used : $mydev3_percent)")
+	#mydev3=$(echo "$mydev3_name \t$mydev3_avail \t(used : $mydev3_percent)")
+	mydev3=$(echo "$mydev3_name $mydev3_avail")
 fi
 if [[ $mydev4_name != '' ]]
 then
-	mydev4=$(echo "$mydev4_name $mydev4_avail (used : $mydev4_percent)")
+	#mydev4=$(echo "$mydev4_name \t$mydev4_avail \t(used : $mydev4_percent)")
+	mydev4=$(echo "$mydev4_name $mydev4_avail")
 fi
 
-
 # ASCII goodness…
-  cat <<EOF
-${dk}                 +
-                 #                 ${tx}Machine:${ec} ${machine}${dk}
-                ###                ${tx}Architecture:${ec} ${arch}${dk}
-               #####               ${tx}Kernel:${ec} ${mykernel}${dk}
-               ######              ${tx}CPU:${ec} ${mycpu}${dk}
-              ; #####;             ${tx}Memory:${ec} ${mymem^}${dk}
-             +##.#####             ${tx}Uptime:${ec} ${myuptime}${dk}
-            +##########            ${tx}Shell:${ec} ${myshell^}${dk}
-           #############;          
-          ###############+         ${tx}Storage:${ec}${dk}
-         #######   #######         ${ec}${mydev1}${dk}
-       .######;     ;###;\`.        ${ec}${mydev2}${dk}
-      .#######;     ;#####.        ${ec}${mydev3}${dk}
-      #########.   .########\`     ${ec}${mydev4}${dk}
-     ######'           '######
-    ;####                 ####;
-    ##'                     '##
-   #'                         \`#
-  '                            \`${ec}
+#echo -e "${dk}
+#                 +
+#                 #                 ${tx}Machine:${ec} ${machine}${dk}
+#                ###                ${tx}Architecture:${ec} ${arch}${dk}
+#               #####               ${tx}Kernel:${ec} ${mykernel}${dk}
+#               ######              ${tx}CPU:${ec} ${mycpu}${dk}
+#              ; #####;             ${tx}Memory:${ec} ${mymem^}${dk}
+#             +##.#####             ${tx}Uptime:${ec} ${myuptime}${dk}
+#            +##########            ${tx}Shell:${ec} ${myshell^}${dk}
+#           #############;          ${tx}IP:${ec} ${myip}${dk}
+#          ###############+         ${tx}Packages:${ec} ${mypackages^}${dk} 
+#         #######   #######         
+#       .######;     ;###;\`.        ${tx}Storage:${ec}${dk} 
+#      .#######;     ;#####.        ${ec}${mydev1}${dk}
+#      #########.   .########\`      ${ec}${mydev2}${dk}
+#     ######'           '######      ${ec}${mydev3}${dk}
+#    ;####                 ####;     ${ec}${mydev4}${dk}
+#    ##'                     '##
+#   #'                         \`#
+#  '                            \`${ec}
+#"
 
-EOF
+echo -e "${dk}
+                ._,.
+          '..-..pf.
+         -L   ..#'
+       .+_L  .']#
+       ,'j' .+.j'                 -'.__..,.,p. ${tx}Machine:${ec} ${machine}${dk}
+      _~ #..<..0.                 .J-.''..._f. ${tx}Architecture:${ec} ${arch}${dk}
+     .7..#_.. _f.                .....-..,'4'  ${tx}Kernel:${ec} ${mykernel}${dk}
+     ;' ,#j.  T'      ..         ..J....,'.j'  ${tx}CPU:${ec} ${mycpu}${dk}
+    .' ..'^.,-0.,,,,yMMMMM,.    ,-.J...+'.j@   ${tx}Memory:${ec} ${mymem^}${dk}
+   .'.'...' .yMMMMM0M@^='''g.. .'..J..'.'.jH   ${tx}Uptime:${ec} ${myuptime}${dk}
+   j' .'1'  q'^)@@#'^'.''='BNg_...,]_)'...0-   ${tx}Shell:${ec} ${myshell^}${dk}
+  .T ...I. j'    .'..+,_.'3#MMM0MggCBf....F.   ${tx}IP:${ec} ${myip}${dk}
+  j/.+'.{..+       '^~'-^~~''''''''?'''''1'    ${tx}Packages:${ec} ${mypackages^}${dk} 
+  .... .y.}                  '.._-:'_...jf
+  g-.  .Lg'                 ..,..'-....,'.
+ .'.   .Y^                  .....',].._f
+ ......-f.                 .-,,.,.-:--&'       ${tx}Storage:${ec}${dk} 
+                           .'...'..'_J'        ${ec}${mydev1}${dk}
+                           .~......'#'         ${ec}${mydev2}${dk}
+                           '..,,.,_]'          ${ec}${mydev3}${dk}
+                           .L..'..''.          ${ec}${mydev4}${dk}
+${ec}"

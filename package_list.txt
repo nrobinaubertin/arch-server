@@ -5,11 +5,7 @@ ffmpeg
 fortune-mod
 htop
 iftop
-imagemagick
 lm_sensors
-mongodb
-mongodb-tools
-nasm
 ncdu
 neovim
 net-tools
@@ -20,11 +16,8 @@ openssh
 php-fpm
 php-gd
 php-mcrypt
-php-mongodb
 ranger
 rtorrent
-ruby
-rxvt-unicode
 tmux
 traceroute
 tree
