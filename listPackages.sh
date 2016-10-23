@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # This script is designed to help you clean your computer from unneeded
 # packages. The script will find all packages that no other installed package

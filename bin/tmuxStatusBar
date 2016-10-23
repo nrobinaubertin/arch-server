@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 cpu=$(w | sed -n '1p' | sed 's/^.*average:\ \(.*\),.*,.*/\1/')
 batteryStatus=$(acpi -b | awk 'sub(/,/,"") {print $3, $4}')
 batteryStatus=$( echo $batteryStatus | sed -e "s/,//")

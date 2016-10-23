@@ -1,0 +1,49 @@
+#!/bin/sh
+
+function usage {
+	echo
+	echo "usage : $0 [-e file] [-d directory]"
+	echo "-e : encrypt following directory"
+	echo "-d : decrypt following file"
+	echo
+}
+
+function reqcheck {
+	if [[ -z `which tar 2>/dev/null` ]] && [[ -z `which gpg 2>/dev/null` ]] && [[ -z `which dirname 2>/dev/null` ]]
+	then
+		echo "You need to have dirname, tar and gpg in your PATH" 1>&2
+		exit 1
+	fi
+}
+
+function encrypt {
+	reqcheck
+	echo $1
+	tar -zc "$1" | gpg -qc -o "$1.gpg"
+}
+
+function decrypt {
+	reqcheck
+	loc=`dirname "$1"`
+	gpg -qd "$1" | tar -zxf "$loc" -
+}
+
+if (( $# == 0 || $# > 2 ))
+then
+	usage
+	exit 0
+else 
+	# erase trailing /
+	f=${2%/}
+	case "$1" in
+		"-e")
+			encrypt "$f"
+			;;
+		"-d")
+			decrypt "$f"
+			;;
+		*)
+			usage
+			;;
+	esac
+fi

@@ -1,6 +1,7 @@
 dfc
 exfat-utils
 fcron
+gpg
 htop
 iftop
 lm_sensors

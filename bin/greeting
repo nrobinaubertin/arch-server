@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Copyright (c) 2016 Niels Robin-Aubertin
 # The MIT License (MIT) http://opensource.org/licenses/MIT
 
@@ -28,7 +28,6 @@ if [ "$uph" != 0 ]; then upm=$(( $upm - $uph*60 )); fi
 if [ "$upd" != 0 ]; then uph=$(( $uph - $upd*24 )); fi
 if [ "$ups" -lt 10 ]; then ups=$( echo "0$ups"); fi
 if [ "$upm" -lt 10 ]; then upm=$( echo "0$upm"); fi
-#if [ "$uph" -lt 10 ]; then uph=$( echo "0$uph"); fi
 
 if [ "$upd" != 0 ]
 then
@@ -55,35 +54,35 @@ mydev2_name=$(echo $mydev2_data | cut -d' ' -f1)
 mydev3_name=$(echo $mydev3_data | cut -d' ' -f1)
 mydev4_name=$(echo $mydev4_data | cut -d' ' -f1)
 
-mydev1_avail=$(echo $mydev1_data | cut -d' ' -f2)
-mydev2_avail=$(echo $mydev2_data | cut -d' ' -f2)
-mydev3_avail=$(echo $mydev3_data | cut -d' ' -f2)
-mydev4_avail=$(echo $mydev4_data | cut -d' ' -f2)
+mydev1_avail=$(echo $mydev1_data | cut -d' ' -f4)
+mydev2_avail=$(echo $mydev2_data | cut -d' ' -f4)
+mydev3_avail=$(echo $mydev3_data | cut -d' ' -f4)
+mydev4_avail=$(echo $mydev4_data | cut -d' ' -f4)
 
-mydev1_percent=$(echo $mydev1_data | cut -d' ' -f5)
-mydev2_percent=$(echo $mydev2_data | cut -d' ' -f5)
-mydev3_percent=$(echo $mydev3_data | cut -d' ' -f5)
-mydev4_percent=$(echo $mydev4_data | cut -d' ' -f5)
+mydev1_size=$(echo $mydev1_data | cut -d' ' -f2)
+mydev2_size=$(echo $mydev2_data | cut -d' ' -f2)
+mydev3_size=$(echo $mydev3_data | cut -d' ' -f2)
+mydev4_size=$(echo $mydev4_data | cut -d' ' -f2)
 
 if [[ $mydev1_name != '' ]]
 then
 	#mydev1=$(echo "$mydev1_name \t$mydev1_avail \t(used : $mydev1_percent)")
-	mydev1=$(echo "$mydev1_name $mydev1_avail")
+	mydev1=$(echo "$mydev1_name $mydev1_avail / $mydev1_size")
 fi
 if [[ $mydev2_name != '' ]]
 then
 	#mydev2=$(echo "$mydev2_name \t$mydev2_avail \t(used : $mydev2_percent)")
-	mydev2=$(echo "$mydev2_name $mydev2_avail")
+	mydev2=$(echo "$mydev2_name $mydev2_avail / $mydev2_size")
 fi
 if [[ $mydev3_name != '' ]]
 then
 	#mydev3=$(echo "$mydev3_name \t$mydev3_avail \t(used : $mydev3_percent)")
-	mydev3=$(echo "$mydev3_name $mydev3_avail")
+	mydev3=$(echo "$mydev3_name $mydev3_avail / $mydev3_size")
 fi
 if [[ $mydev4_name != '' ]]
 then
 	#mydev4=$(echo "$mydev4_name \t$mydev4_avail \t(used : $mydev4_percent)")
-	mydev4=$(echo "$mydev4_name $mydev4_avail")
+	mydev4=$(echo "$mydev4_name $mydev4_avail / $mydev4_size")
 fi
 
 echo -e "${dk}
