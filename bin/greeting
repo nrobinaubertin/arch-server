@@ -86,29 +86,6 @@ then
 	mydev4=$(echo "$mydev4_name $mydev4_avail")
 fi
 
-# ASCII goodness…
-#echo -e "${dk}
-#                 +
-#                 #                 ${tx}Machine:${ec} ${machine}${dk}
-#                ###                ${tx}Architecture:${ec} ${arch}${dk}
-#               #####               ${tx}Kernel:${ec} ${mykernel}${dk}
-#               ######              ${tx}CPU:${ec} ${mycpu}${dk}
-#              ; #####;             ${tx}Memory:${ec} ${mymem^}${dk}
-#             +##.#####             ${tx}Uptime:${ec} ${myuptime}${dk}
-#            +##########            ${tx}Shell:${ec} ${myshell^}${dk}
-#           #############;          ${tx}IP:${ec} ${myip}${dk}
-#          ###############+         ${tx}Packages:${ec} ${mypackages^}${dk} 
-#         #######   #######         
-#       .######;     ;###;\`.        ${tx}Storage:${ec}${dk} 
-#      .#######;     ;#####.        ${ec}${mydev1}${dk}
-#      #########.   .########\`      ${ec}${mydev2}${dk}
-#     ######'           '######      ${ec}${mydev3}${dk}
-#    ;####                 ####;     ${ec}${mydev4}${dk}
-#    ##'                     '##
-#   #'                         \`#
-#  '                            \`${ec}
-#"
-
 echo -e "${dk}
                 ._,.
           '..-..pf.
