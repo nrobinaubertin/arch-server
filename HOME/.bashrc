@@ -58,15 +58,7 @@ alias less='less -r'
 complete -cf sudo
 
 # Greetings
-echo "----------"
-echo `date`
-if [[ -n $(which fortune) ]]
-then
-	fortune -sn 70
-	echo "----------"
-fi
 if [[ -n $(which greeting) ]]
 then
 	greeting 2>/dev/null
 fi
-echo "----------"

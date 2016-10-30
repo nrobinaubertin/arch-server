@@ -2,6 +2,13 @@
 # Copyright (c) 2016 Niels Robin-Aubertin
 # The MIT License (MIT) http://opensource.org/licenses/MIT
 
+echo "----------"
+echo `date`
+if [[ -n $(which fortune) ]]
+then
+	fortune -sn 70
+fi
+
 # colours
 lt=$'\e[1;36m' # light cyan
 dk=$'\e[0;36m' # dark cyan
@@ -9,18 +16,27 @@ tx=$'\e[1;32m' # green text
 ec=$'\e[0m'
 
 # details
+echo -n "-"
 machine=$(</proc/sys/kernel/hostname)
+echo -n "-"
 arch=$(uname -m)
+echo -n "-"
 mykernel=$(uname -r)
+echo -n "-"
 mycpu=$(grep -m1 "model name" /proc/cpuinfo | cut -d':' -f2 | sed -r 's/(Intel\(R\)|CPU|@|\s+)/ /g' | sed -r 's/\s+/ /g' | sed -r 's/^\s+//')
+echo -n "-"
 myshell=$(ps -p `ps -p $$ -o ppid=` | sed -n '2p' | sed -r 's/.*\s(.*)$/\1/')
+echo -n "-"
 mymem=$(free -h --si | sed -n '2p' | sed -r 's/\s+/ /g' | cut -d' ' -f2)
+echo -n "-"
 myip=$(ip route show | tail -n1 | sed -r 's/.*src(.*)/\1/' | cut -d' ' -f2)
+echo -n "-"
 mypackages=$(pacman -Qet | wc -l)
-mylatency=$(ping -c 3 -l 3 8.8.8.8 2>/dev/null | tail -n1 | awk '{print $4}' | tr '/' ' ' | cut -d'.' -f1)
+echo -n "-"
 
 # get uptime
 ups=$(cat /proc/uptime | cut -d. -f1)
+echo -n "-"
 upm=$(( $ups / 60 ))
 uph=$(( $upm / 60 ))
 upd=$(( $uph / 24 ))
@@ -85,6 +101,7 @@ then
 	#mydev4=$(echo "$mydev4_name \t$mydev4_avail \t(used : $mydev4_percent)")
 	mydev4=$(echo "$mydev4_name $mydev4_avail / $mydev4_size")
 fi
+timestamp
 
 echo -e "${dk}
                 ._,.
