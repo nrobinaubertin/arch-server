@@ -2,7 +2,8 @@
 for x in $(cat package_list.txt); do sudo pacman --noconfirm -S $x; done
 
 # bin
-cp -r bin ~/bin
+mkdir -p ~/bin
+cp -t ~/bin bin/*
 
 # dotFiles
 cp -r -t ~/ HOME/.config

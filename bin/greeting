@@ -17,6 +17,7 @@ myshell=$(ps -p `ps -p $$ -o ppid=` | sed -n '2p' | sed -r 's/.*\s(.*)$/\1/')
 mymem=$(free -h --si | sed -n '2p' | sed -r 's/\s+/ /g' | cut -d' ' -f2)
 myip=$(ip route show | tail -n1 | sed -r 's/.*src(.*)/\1/' | cut -d' ' -f2)
 mypackages=$(pacman -Qet | wc -l)
+mylatency=$(ping -c 3 -l 3 8.8.8.8 2>/dev/null | tail -n1 | awk '{print $4}' | tr '/' ' ' | cut -d'.' -f1)
 
 # get uptime
 ups=$(cat /proc/uptime | cut -d. -f1)
@@ -98,8 +99,8 @@ echo -e "${dk}
    .'.'...' .yMMMMM0M@^='''g.. .'..J..'.'.jH   ${tx}Uptime:${ec} ${myuptime}${dk}
    j' .'1'  q'^)@@#'^'.''='BNg_...,]_)'...0-   ${tx}Shell:${ec} ${myshell^}${dk}
   .T ...I. j'    .'..+,_.'3#MMM0MggCBf....F.   ${tx}IP:${ec} ${myip}${dk}
-  j/.+'.{..+       '^~'-^~~''''''''?'''''1'    ${tx}Packages:${ec} ${mypackages^}${dk} 
-  .... .y.}                  '.._-:'_...jf
+  j/.+'.{..+       '^~'-^~~''''''''?'''''1'    ${tx}Latency:${ec} ${mylatency}ms${dk}
+  .... .y.}                  '.._-:'_...jf     ${tx}Packages:${ec} ${mypackages^}${dk} 
   g-.  .Lg'                 ..,..'-....,'.
  .'.   .Y^                  .....',].._f
  ......-f.                 .-,,.,.-:--&'       ${tx}Storage:${ec}${dk} 
