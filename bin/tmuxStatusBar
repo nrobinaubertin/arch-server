@@ -2,14 +2,14 @@
 
 cpu=$(w | sed -n '1p' | sed 's/^.*average:\ \(.*\),.*,.*/\1/')
 latency=$(ping -c 1 -l 1 8.8.8.8 2>/dev/null | tail -n1 | awk '{print $4}' | tr '/' ' ' | cut -d'.' -f1)
-#if (( $latency < 100 ))
-#then
-#    latency=" $latency"
-#    if (( $latency < 10 ))
-#    then
-#        latency=" $latency"
-#    fi
-#fi
+if (( $latency < 100 ))
+then
+    latency=" $latency"
+    if (( $latency < 10 ))
+    then
+        latency=" $latency"
+    fi
+fi
 
 #batteryStatus=$(acpi -b | awk 'sub(/,/,"") {print $3, $4}' | sed -e "s/,//")
 #if [[ -z $batteryStatus ]]

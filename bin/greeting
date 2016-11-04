@@ -116,8 +116,8 @@ echo -e "${dk}
    .'.'...' .yMMMMM0M@^='''g.. .'..J..'.'.jH   ${tx}Uptime:${ec} ${myuptime}${dk}
    j' .'1'  q'^)@@#'^'.''='BNg_...,]_)'...0-   ${tx}Shell:${ec} ${myshell^}${dk}
   .T ...I. j'    .'..+,_.'3#MMM0MggCBf....F.   ${tx}IP:${ec} ${myip}${dk}
-  j/.+'.{..+       '^~'-^~~''''''''?'''''1'    ${tx}Latency:${ec} ${mylatency}ms${dk}
-  .... .y.}                  '.._-:'_...jf     ${tx}Packages:${ec} ${mypackages^}${dk} 
+  j/.+'.{..+       '^~'-^~~''''''''?'''''1'    ${tx}Packages:${ec} ${mypackages^}${dk} 
+  .... .y.}                  '.._-:'_...jf     
   g-.  .Lg'                 ..,..'-....,'.
  .'.   .Y^                  .....',].._f
  ......-f.                 .-,,.,.-:--&'       ${tx}Storage:${ec}${dk} 
