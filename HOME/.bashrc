@@ -31,13 +31,20 @@ then
     export EDITOR="/usr/bin/nvim"
 fi
 
+# set pager conf
+export LESS_TERMCAP_mb=$'\E[01;31m'
+export LESS_TERMCAP_md=$'\E[01;31m'
+export LESS_TERMCAP_me=$'\E[0m'
+export LESS_TERMCAP_so=$'\E[01;44;33m'
+export LESS_TERMCAP_se=$'\E[0m'
+export LESS_TERMCAP_us=$'\E[01;32m'
+export LESS_TERMCAP_ue=$'\E[0m'
+export LESS="-RI"
+
 # set history variables
 unset HISTFILESIZE
 HISTSIZE="10000"
 HISTCONTROL=ignoreboth:erasedups
-# share history across all terminals
-PROMPT_COMMAND="history -a; history -c; history -r"
-export HISTSIZE PROMPT_COMMAND
 
 # some aliases
 alias cd..='cd ..'
@@ -52,7 +59,7 @@ alias tmux='tmux -2'
 alias duhs='du -hs * | sort -h'
 alias play='mpv --no-video *.mp3'
 alias todo='nvim ~/.TODO'
-alias less='less -r'
+#alias less='less -r'
 
 # completion with sudo
 complete -cf sudo
