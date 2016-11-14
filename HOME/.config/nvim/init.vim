@@ -15,6 +15,8 @@ set background=dark
 " number of spaces for a tab
 set shiftwidth=4
 set tabstop=4
+set softtabstop=4
+set expandtab
 
 "" switch to previous used tab (not the same as :tabp)
 let g:lasttab = 1
