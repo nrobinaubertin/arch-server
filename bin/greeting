@@ -101,7 +101,6 @@ then
 	#mydev4=$(echo "$mydev4_name \t$mydev4_avail \t(used : $mydev4_percent)")
 	mydev4=$(echo "$mydev4_name $mydev4_avail / $mydev4_size")
 fi
-timestamp
 
 echo -e "${dk}
                 ._,.

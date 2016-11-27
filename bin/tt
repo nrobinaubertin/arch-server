@@ -1,0 +1,33 @@
+#!/bin/bash
+
+echo "UNSTABLE"
+exit 1
+
+set -e
+
+if (( $# == 0 ))
+then
+    echo "Missing file operand." 1>&2
+    exit 1
+fi
+
+# create the trash directory
+mkdir -p "$HOME/.trash"
+
+if ! [ -d "$HOME/.trash" ]
+then
+   echo "$HOME/.trash directory could not be created" 1>&2
+   exit 1
+fi
+
+t=$(date +%s)
+s=$(cat /dev/urandom | tr -dc "a-zA-Z0-9" | fold -w 10 | head -n1)
+target=${1%/}
+out="$target.$s.$t"
+
+mv -T "$target" "$HOME/.trash/$out"
+
+if (( $# > 1 ))
+then
+    $0 "${@:2}"
+fi

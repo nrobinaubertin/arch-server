@@ -50,16 +50,15 @@ HISTCONTROL=ignoreboth:erasedups
 alias cd..='cd ..'
 alias :q='exit'
 alias cls='clear'
-#alias son='alsamixer'
+alias son='alsamixer'
 alias ll='ls -lhb --color'
 alias lla='ls -alhb --color'
 alias timestamp='date +%s'
-alias vim='vim -p'
+alias nvim='nvim -p'
 alias tmux='tmux -2'
 alias duhs='du -hs * | sort -h'
 alias play='mpv --no-video *.mp3'
 alias todo='nvim ~/.TODO'
-#alias less='less -r'
 
 # completion with sudo
 complete -cf sudo

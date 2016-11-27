@@ -1,0 +1,29 @@
+#!/bin/sh
+
+echo "UNSTABLE"
+exit 1
+
+function clean {
+    if [[ $1 == "--all" ]]
+    then
+         docker stop $( docker ps -aq)
+        if [[ -n $( docker ps -aq) ]]
+        then
+             docker rm $( docker ps -aq)
+        fi
+        if [[ -n $( docker images -aq) ]]
+        then
+             docker rmi $( docker images -aq)
+        fi
+    else
+        if [[ -n $( docker ps --filter status=dead --filter status=exited -aq) ]]
+        then
+             docker rm $( docker ps --filter status=dead --filter status=exited -aq)        
+        fi
+        if [[ -n $( docker images | grep '<none>' | awk '{ print $3 }') ]]
+        then
+             docker rmi $( docker images | grep '<none>' | awk '{ print $3 }')
+        fi
+    fi
+}
+clean
