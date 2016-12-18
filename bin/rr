@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# TODO
+# usage function
+# empty trash
+
+set -e
+
+if (( $# == 0 ))
+then
+    echo "Missing file operand." 1>&2
+    exit 1
+fi
+
+if [[ "$1" == "--size" ]]
+then
+    du -hs "$HOME/.trash" | cut -f1;
+    exit 0
+fi
+
+# create the trash directory
+mkdir -p "$HOME/.trash"
+
+if ! [ -d "$HOME/.trash" ]
+then
+   echo "$HOME/.trash directory could not be created" 1>&2
+   exit 1
+fi
+
+# erase all files older than one week in the trash
+find "$HOME/.trash" -maxdepth 1 -mtime +7 -exec rm -rf "{}" \;
+
+t=$(date +%s)
+s=$(cat /dev/urandom | tr -dc "a-zA-Z0-9" | fold -w 10 | head -n1)
+target=${1%/}
+out="${target##*/}.$s.$t"
+
+mv -T "$target" "$HOME/.trash/$out"
+
+if (( $# > 1 ))
+then
+    $0 "${@:2}"
+fi

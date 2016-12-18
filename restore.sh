@@ -9,6 +9,5 @@ cp -t ~/bin bin/*
 cp -r -t ~/ HOME/.config
 cp -t ~/ HOME/.bashrc
 cp -t ~/ HOME/.tmux.conf
-cp -t ~/ HOME/.bash_profile
 #cp -r -t ~/ HOME/*
 #cp -r -t ~/ HOME/.*

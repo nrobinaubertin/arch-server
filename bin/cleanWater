@@ -1,0 +1,35 @@
+#!/bin/sh
+
+function clean {
+    if [[ $1 == "--all" ]]
+    then
+         docker stop $( docker ps -aq)
+        if [[ -n $( docker ps -aq) ]]
+        then
+             docker rm $( docker ps -aq)
+        fi
+        if [[ -n $( docker images -aq) ]]
+        then
+             docker rmi $( docker images -aq)
+        fi
+        if [[ -n $( docker volume ls -q) ]]
+        then
+            docker volume rm $(docker volume ls -q)
+        fi
+    else
+        if [[ -n $( docker volume ls -qf dangling=true) ]]
+        then
+            docker volume rm $(docker volume ls -qf dangling=true)
+        fi
+        if [[ -n $( docker ps --filter status=dead --filter status=exited -aq) ]]
+        then
+             docker rm $( docker ps --filter status=dead --filter status=exited -aq)        
+        fi
+        if [[ -n $( docker images | grep '<none>' | awk '{ print $3 }') ]]
+        then
+             docker rmi $( docker images | grep '<none>' | awk '{ print $3 }')
+        fi
+    fi
+}
+
+clean $1
