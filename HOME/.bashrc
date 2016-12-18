@@ -68,8 +68,15 @@ alias nvim='nvim -p'
 alias tmux='tmux -2'
 alias duhs='du -hs * | sort -h'
 alias ds='du -hs'
-alias play='mpv --no-video *.mp3'
+if [[ -z $(mpv) ]]
+then
+    alias play='mpv --no-video *.mp3'
+fi
 alias todo="nvim ${HOME}/.TODO"
+if [[ -z $(youtube-dl) ]]
+then
+    alias ytmp3='youtube-dl --extract-audio --audio-quality 3 --audio-format mp3'
+fi
 
 # completion with sudo
 complete -cf sudo
