@@ -7,7 +7,6 @@ iftop
 ncdu
 neovim
 net-tools
-npm
 ntfs-3g
 openssh
 ranger

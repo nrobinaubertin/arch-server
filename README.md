@@ -16,4 +16,4 @@ ssh.sh is a *bonus* script if you want to set up a ssh server quickly.
 
 ### Is it stable ?
 Of course not. This code is not meant to be used in production.
-The best is to read it and use some parts here and there for your personal use if you wan to.
+The best is to read it and use some parts here and there for your personal use if you want to.
