@@ -53,7 +53,7 @@ HISTCONTROL=ignoreboth:erasedups
 alias cd..='cd ..'
 alias :q='exit'
 alias cls='clear'
-if [[ -n $(which exa 2>/dev/null) ]]
+if [[ -z $(which exa 2>/dev/null) ]]
 then
     alias ll='ls -lhb --color'
     alias lla='ls -alhb --color'
@@ -63,11 +63,8 @@ else
     alias lla='exa -agl --git'
     alias llt='exa -gl --git -s modified'
 fi
-alias timestamp='date +%s'
 alias nvim='nvim -p'
 alias tmux='tmux -2'
-alias duhs='du -hs * | sort -h'
-alias ds='du -hs'
 if [[ -n $(mpv 2>/dev/null) ]]
 then
     alias play='mpv --no-video *.mp3'
