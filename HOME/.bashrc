@@ -1,6 +1,6 @@
 # prompt_style (from jason wryan)
 function set_prompt_style {
-    if [[ -n $SSH_CLIENT ]]; then
+    if [[ -n "$SSH_CLIENT" ]]; then
         PS1="┌─[\[\e[0;34m\]\h\[\e[0m\] \[\e[1;33m\]\w:\[\e[0m\] \[\e[1;31m\]«SSH»\[\e[0m\]]\n└─╼ "
     else
         PS1="┌─[\[\e[34m\]\h\[\e[0m\] \[\e[32m\]\w\[\e[0m\]]\n└─╼ "
@@ -9,7 +9,7 @@ function set_prompt_style {
 
 set_prompt_style
 
-# start tmux (for server)
+# attach/start tmux
 function start_tmux {
     # If not running interactively, do not do anything
     [[ $- != *i* ]] && return
@@ -24,8 +24,11 @@ function start_tmux {
     fi
 }
 
+# for server only
+#start_tmux()
+
 # export variables
-export PATH="$PATH:~/bin"
+export PATH="${PATH}:${HOME}/bin"
 if [[ -n $(which nvim) ]]
 then
     export EDITOR="/usr/bin/nvim"
@@ -50,15 +53,23 @@ HISTCONTROL=ignoreboth:erasedups
 alias cd..='cd ..'
 alias :q='exit'
 alias cls='clear'
-alias son='alsamixer'
-alias ll='ls -lhb --color'
-alias lla='ls -alhb --color'
+if [[ -z $(which exa) ]]
+then
+    alias ll='ls -lhb --color'
+    alias lla='ls -alhb --color'
+    alias llt='ls -lhbt --color'
+else
+    alias ll='exa -gl --git'
+    alias lla='exa -agl --git'
+    alias llt='exa -gl --git -s modified'
+fi
 alias timestamp='date +%s'
 alias nvim='nvim -p'
 alias tmux='tmux -2'
 alias duhs='du -hs * | sort -h'
+alias ds='du -hs'
 alias play='mpv --no-video *.mp3'
-alias todo='nvim ~/.TODO'
+alias todo="nvim ${HOME}/.TODO"
 
 # completion with sudo
 complete -cf sudo

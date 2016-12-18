@@ -1,8 +1,5 @@
 #!/bin/sh
 
-echo "UNSTABLE"
-exit 1
-
 function clean {
     if [[ $1 == "--all" ]]
     then
@@ -15,7 +12,15 @@ function clean {
         then
              docker rmi $( docker images -aq)
         fi
+        if [[ -n $( docker volume ls -q) ]]
+        then
+            docker volume rm $(docker volume ls -q)
+        fi
     else
+        if [[ -n $( docker volume ls -qf dangling=true) ]]
+        then
+            docker volume rm $(docker volume ls -qf dangling=true)
+        fi
         if [[ -n $( docker ps --filter status=dead --filter status=exited -aq) ]]
         then
              docker rm $( docker ps --filter status=dead --filter status=exited -aq)        
@@ -26,4 +31,5 @@ function clean {
         fi
     fi
 }
-clean
+
+clean $1
