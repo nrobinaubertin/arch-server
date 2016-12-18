@@ -2,7 +2,8 @@
 # speed transfer snapshot
 
 duration=2
-interface="wlp3s0"
+#interface="wlp3s0"
+interface=$(ip route show | grep default | cut -d' ' -f5)
 
 sys_dir="/sys/class/net/${interface}/statistics"
 

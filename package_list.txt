@@ -4,7 +4,6 @@ fcron
 gpg
 htop
 iftop
-lm_sensors
 ncdu
 neovim
 net-tools
@@ -14,6 +13,5 @@ openssh
 ranger
 tmux
 traceroute
-tree
 unzip
 wget

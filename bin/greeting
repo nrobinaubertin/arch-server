@@ -48,7 +48,7 @@ if [ "$upm" -lt 10 ]; then upm=$( echo "0$upm"); fi
 
 if [ "$upd" != 0 ]
 then
-	if [ "$upd" < 10 ]
+	if [ "$upd" <= 9 ]
 	then
 		myuptime=$(echo "$upd day, $uph:$upm:$ups")
 	else
