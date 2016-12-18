@@ -25,7 +25,7 @@ function start_tmux {
 }
 
 # for server only
-#start_tmux()
+start_tmux
 
 # export variables
 export PATH="${PATH}:${HOME}/bin"
