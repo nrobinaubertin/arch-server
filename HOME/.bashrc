@@ -53,7 +53,7 @@ HISTCONTROL=ignoreboth:erasedups
 alias cd..='cd ..'
 alias :q='exit'
 alias cls='clear'
-if [[ -z $(which exa) ]]
+if [[ -n $(which exa 2>/dev/null) ]]
 then
     alias ll='ls -lhb --color'
     alias lla='ls -alhb --color'
@@ -68,12 +68,12 @@ alias nvim='nvim -p'
 alias tmux='tmux -2'
 alias duhs='du -hs * | sort -h'
 alias ds='du -hs'
-if [[ -z $(mpv) ]]
+if [[ -n $(mpv 2>/dev/null) ]]
 then
     alias play='mpv --no-video *.mp3'
 fi
 alias todo="nvim ${HOME}/.TODO"
-if [[ -z $(youtube-dl) ]]
+if [[ -n $(youtube-dl 2>/dev/null) ]]
 then
     alias ytmp3='youtube-dl --extract-audio --audio-quality 3 --audio-format mp3'
 fi
@@ -82,7 +82,7 @@ fi
 complete -cf sudo
 
 # Greetings
-if [[ -n $(which greeting) ]]
+if [[ -n $(which greeting 2>/dev/null) ]]
 then
 	greeting 2>/dev/null
 fi
