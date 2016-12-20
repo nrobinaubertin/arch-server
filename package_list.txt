@@ -8,7 +8,6 @@ ncdu
 neovim
 net-tools
 ntfs-3g
-openssh
 ranger
 tmux
 traceroute
