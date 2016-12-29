@@ -3,8 +3,16 @@
 # TODO
 # usage function
 # empty trash
+# errors when emptying trash : there can be some files without write rights
 
+# stop if something goes wrong
 set -e
+
+# nounce to avoid duplicate files in the trash in the same swipe
+nounce=0
+
+# timestamp to avoid duplicates over multiple swipes
+timestamp=$(date +%s)
 
 if (( $# == 0 ))
 then
@@ -18,26 +26,38 @@ then
     exit 0
 fi
 
-# create the trash directory
-mkdir -p "$HOME/.trash"
-
-if ! [ -d "$HOME/.trash" ]
+if [[ "$1" == "--empty" ]]
 then
-   echo "$HOME/.trash directory could not be created" 1>&2
-   exit 1
+    # erase all files older than one week in the trash (and not accessed)
+    ret=$(find "$HOME/.trash" -maxdepth 1 -atime +7 -exec rm -rf "{}" \; 2>&1)
+    if [[ -n $ret ]]
+    then
+        echo "Some files in the trash could not be deleted"
+    fi
+    exit 0
 fi
 
-# erase all files older than one week in the trash
-find "$HOME/.trash" -maxdepth 1 -mtime +7 -exec rm -rf "{}" \;
+function sendToTrash {
 
-t=$(date +%s)
-s=$(cat /dev/urandom | tr -dc "a-zA-Z0-9" | fold -w 10 | head -n1)
-target=${1%/}
-out="${target##*/}.$s.$t"
+    # create the trash directory
+    mkdir -p "$HOME/.trash"
 
-mv -T "$target" "$HOME/.trash/$out"
+    if ! [ -d "$HOME/.trash" ]
+    then
+       echo "$HOME/.trash directory could not be created" 1>&2
+       exit 1
+    fi
 
-if (( $# > 1 ))
-then
-    $0 "${@:2}"
-fi
+    nounce=$(( $nounce + 1 ))
+    filename=${1%/}
+    target="${filename##*/}.${nounce}.${timestamp}"
+
+    mv -T "$filename" "$HOME/.trash/$target"
+    
+    if (( $# > 1 ))
+    then
+        sendToTrash "${@:2}"
+    fi
+}
+
+sendToTrash "${@:1}"
