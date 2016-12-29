@@ -25,7 +25,7 @@ function start_tmux {
 }
 
 # for server only
-start_tmux
+#start_tmux
 
 # export variables
 export PATH="${PATH}:${HOME}/bin"
@@ -65,12 +65,12 @@ else
 fi
 alias nvim='nvim -p'
 alias tmux='tmux -2'
-if [[ -n $(mpv 2>/dev/null) ]]
+if [[ -n $(which mpv 2>/dev/null) ]]
 then
     alias play='mpv --no-video *.mp3'
 fi
 alias todo="nvim ${HOME}/.TODO"
-if [[ -n $(youtube-dl 2>/dev/null) ]]
+if [[ -n $(which youtube-dl 2>/dev/null) ]]
 then
     alias ytmp3='youtube-dl --extract-audio --audio-quality 3 --audio-format mp3'
 fi
