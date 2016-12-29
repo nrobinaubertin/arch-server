@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# Script used to lock things (and to unlock them)
+
 function usage {
 	echo
 	echo "usage : $0 [-e file] [-d directory]"

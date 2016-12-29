@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# gives instant cpu usage
+# gives instant cpu usage without parsing w
 
 # CPU line courtesy Procyon:
 # https://bbs.archlinux.org/viewtopic.php?pid=874333#p874333
