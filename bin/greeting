@@ -1,11 +1,8 @@
 #!/bin/sh
 
 # TODO
-# accelerate ip route show (find another way to do it if possible)
 # use colors effectively
-# colors don't work on iterminal (mac) because there is no echo -e.
 # enhance display of storage
-# count packages in a non-arch way
 # remove fortune ?
 
 # Text Reset
@@ -88,12 +85,6 @@ then
 	fortune -sn 70
 fi
 
-# colours
-lt='\e[1;36m' # light cyan
-dk='\e[0;36m' # dark cyan
-tx='\e[1;32m' # green text
-ec='\e[0m'
-
 # details
 echo -n "-"
 machine=$(</proc/sys/kernel/hostname)
@@ -110,8 +101,8 @@ mymem=$(free -h --si | sed -n '2p' | sed -r 's/\s+/ /g' | cut -d' ' -f2)
 echo -n "-"
 myip=$(ip route show | tail -n1 | sed -r 's/.*src(.*)/\1/' | cut -d' ' -f2)
 echo -n "-"
-mypackages=$(pacman -Qet | wc -l)
-echo -n "-"
+#mypackages=$(pacman -Qet | wc -l)
+#echo -n "-"
 
 # get uptime
 ups=$(cat /proc/uptime | cut -d. -f1)
@@ -181,26 +172,26 @@ then
 	mydev4=$(echo "$mydev4_name $mydev4_avail / $mydev4_size")
 fi
 
-echo -e "${dk}
+echo -e "${Cya}
                 ._,.
           '..-..pf.
          -L   ..#'
        .+_L  .']#
-       ,'j' .+.j'                 -'.__..,.,p. ${tx}Machine:${ec} ${machine}${dk}
-      _~ #..<..0.                 .J-.''..._f. ${tx}Architecture:${ec} ${arch}${dk}
-     .7..#_.. _f.                .....-..,'4'  ${tx}Kernel:${ec} ${mykernel}${dk}
-     ;' ,#j.  T'      ..         ..J....,'.j'  ${tx}CPU:${ec} ${mycpu}${dk}
-    .' ..'^.,-0.,,,,yMMMMM,.    ,-.J...+'.j@   ${tx}Memory:${ec} ${mymem^}${dk}
-   .'.'...' .yMMMMM0M@^='''g.. .'..J..'.'.jH   ${tx}Uptime:${ec} ${myuptime}${dk}
-   j' .'1'  q'^)@@#'^'.''='BNg_...,]_)'...0-   ${tx}Shell:${ec} ${myshell^}${dk}
-  .T ...I. j'    .'..+,_.'3#MMM0MggCBf....F.   ${tx}IP:${ec} ${myip}${dk}
-  j/.+'.{..+       '^~'-^~~''''''''?'''''1'    ${tx}Packages:${ec} ${mypackages^}${dk} 
+       ,'j' .+.j'                 -'.__..,.,p. ${BGre}Machine:${RCol} ${machine}${Cya}
+      _~ #..<..0.                 .J-.''..._f. ${BGre}Architecture:${RCol} ${arch}${Cya}
+     .7..#_.. _f.                .....-..,'4'  ${BGre}Kernel:${RCol} ${mykernel}${Cya}
+     ;' ,#j.  T'      ..         ..J....,'.j'  ${BGre}CPU:${RCol} ${mycpu}${Cya}
+    .' ..'^.,-0.,,,,yMMMMM,.    ,-.J...+'.j@   ${BGre}Memory:${RCol} ${mymem^}${Cya}
+   .'.'...' .yMMMMM0M@^='''g.. .'..J..'.'.jH   ${BGre}Uptime:${RCol} ${myuptime}${Cya}
+   j' .'1'  q'^)@@#'^'.''='BNg_...,]_)'...0-   ${BGre}Shell:${RCol} ${myshell^}${Cya}
+  .T ...I. j'    .'..+,_.'3#MMM0MggCBf....F.   ${BGre}IP:${RCol} ${myip}${Cya}
+  j/.+'.{..+       '^~'-^~~''''''''?'''''1'
   .... .y.}                  '.._-:'_...jf     
   g-.  .Lg'                 ..,..'-....,'.
  .'.   .Y^                  .....',].._f
- ......-f.                 .-,,.,.-:--&'       ${tx}Storage:${ec}${dk} 
-                           .'...'..'_J'        ${ec}${mydev1}${dk}
-                           .~......'#'         ${ec}${mydev2}${dk}
-                           '..,,.,_]'          ${ec}${mydev3}${dk}
-                           .L..'..''.          ${ec}${mydev4}${dk}
-${ec}"
+ ......-f.                 .-,,.,.-:--&'       ${BGre}Storage:${RCol}${Cya} 
+                           .'...'..'_J'        ${RCol}${mydev1}${Cya}
+                           .~......'#'         ${RCol}${mydev2}${Cya}
+                           '..,,.,_]'          ${RCol}${mydev3}${Cya}
+                           .L..'..''.          ${RCol}${mydev4}${Cya}
+${RCol}"
