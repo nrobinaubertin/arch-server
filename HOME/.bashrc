@@ -1,13 +1,13 @@
-# prompt_style (from jason wryan)
-function set_prompt_style {
-    if [[ -n "$SSH_CLIENT" ]]; then
-        PS1="┌─[\[\e[0;34m\]\h\[\e[0m\] \[\e[1;33m\]\w:\[\e[0m\] \[\e[1;31m\]«SSH»\[\e[0m\]]\n└─╼ "
-    else
-        PS1="┌─[\[\e[34m\]\h\[\e[0m\] \[\e[32m\]\w\[\e[0m\]]\n└─╼ "
-    fi
-}
 
-set_prompt_style
+# some colors
+RCol='\033[0m'
+BRed='\033[1;31m'
+Blu='\033[0;34m'
+Gre='\033[0;32m'
+BRed='\033[1;31m';
+
+# prompt_style (inspired by the one from jason wryan)
+PS1="${RCol}┌─[\[${BRed}\]\t\[${RCol}\] \[${Blu}\]\h\[${RCol}\] \[${Gre}\]\w\[${RCol}\]]\n└─╼ "
 
 # attach/start tmux
 function start_tmux {
@@ -29,19 +29,20 @@ function start_tmux {
 
 # export variables
 export PATH="${PATH}:${HOME}/bin"
+#export PATH="${PATH}:${HOME}/.gem/ruby/2.3.0/bin"
 if [[ -n $(which nvim) ]]
 then
     export EDITOR="/usr/bin/nvim"
 fi
 
 # set pager conf
-export LESS_TERMCAP_mb=$'\E[01;31m'
-export LESS_TERMCAP_md=$'\E[01;31m'
-export LESS_TERMCAP_me=$'\E[0m'
-export LESS_TERMCAP_so=$'\E[01;44;33m'
-export LESS_TERMCAP_se=$'\E[0m'
-export LESS_TERMCAP_us=$'\E[01;32m'
-export LESS_TERMCAP_ue=$'\E[0m'
+export LESS_TERMCAP_mb=$'\033[01;31m'
+export LESS_TERMCAP_md=$'\033[01;31m'
+export LESS_TERMCAP_me=$'\033[0m'
+export LESS_TERMCAP_so=$'\033[01;44;33m'
+export LESS_TERMCAP_se=$'\033[0m'
+export LESS_TERMCAP_us=$'\033[01;32m'
+export LESS_TERMCAP_ue=$'\033[0m'
 export LESS="-RI"
 
 # set history variables
