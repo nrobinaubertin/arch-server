@@ -6,7 +6,6 @@ htop
 iftop
 ncdu
 neovim
-net-tools
 ntfs-3g
 ranger
 tmux

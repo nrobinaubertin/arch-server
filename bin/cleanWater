@@ -1,6 +1,7 @@
 #!/bin/sh
 
 # Script used to clean docker instances, images and volumes
+# This script is most likely going to be obsolete with docker 1.13
 
 function clean {
     if [[ $1 == "--all" ]]

@@ -1,3 +1,4 @@
+#!/bin/bash
 
 # some colors
 RCol='\033[0m'
