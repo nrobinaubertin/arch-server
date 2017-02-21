@@ -30,7 +30,7 @@ function start_tmux {
 
 # export variables
 export PATH="${PATH}:${HOME}/bin"
-#export PATH="${PATH}:${HOME}/.gem/ruby/2.3.0/bin"
+#export PATH="${PATH}:${HOME}/.gem/ruby/2.4.0/bin"
 if [[ -n $(which nvim) ]]
 then
     export EDITOR="/usr/bin/nvim"
@@ -55,6 +55,10 @@ HISTCONTROL=ignoreboth:erasedups
 alias cd..='cd ..'
 alias :q='exit'
 alias cls='clear'
+if [[ -n $(which curl 2>/dev/null) ]]
+then
+    alias ww='curl -s wttr.in'
+fi
 if [[ -z $(which exa 2>/dev/null) ]]
 then
     alias ll='ls -lhb --color'
@@ -69,7 +73,7 @@ alias nvim='nvim -p'
 alias tmux='tmux -2'
 if [[ -n $(which mpv 2>/dev/null) ]]
 then
-    alias play='mpv --no-video *.mp3'
+    alias play='mpv --no-video --loop '
 fi
 alias todo="nvim ${HOME}/.TODO"
 if [[ -n $(which youtube-dl 2>/dev/null) ]]

@@ -4,7 +4,6 @@ fcron
 gpg
 htop
 iftop
-ncdu
 neovim
 ntfs-3g
 ranger

@@ -39,6 +39,12 @@ fi
 
 function sendToTrash {
 
+    if ! [[ -e "$1" ]]
+    then
+        echo "$1 does not exists. Aborting."
+        exit 0;
+    fi
+
     # create the trash directory
     mkdir -p "$HOME/.trash"
 

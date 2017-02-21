@@ -1,7 +1,6 @@
 " some common stuff (nvim version)
 set nu
 set showcmd
-set magic
 set ruler
 set mouse=
 set background=dark
@@ -58,10 +57,10 @@ Plug 'cakebaker/scss-syntax.vim'
 " testing
 
 Plug 'easymotion/vim-easymotion'
+Plug 'https://github.com/ctrlpvim/ctrlp.vim'
 
 " disabled
 
-"Plug 'https://github.com/ctrlpvim/ctrlp.vim'
 "Plug 'vim-airline/vim-airline-themes'
 "Plug 'Valloric/YouCompleteMe'
 "Plug 'vitalk/vim-simple-todo'
@@ -81,13 +80,13 @@ autocmd FileType nerdtree noremap <buffer> <C-k> :tabnext<CR>
 autocmd FileType nerdtree noremap <buffer> <C-j> :tabprevious<CR>
 
 "ctrlp options
-"let g:ctrlp_map = '<c-p>'
-"let g:ctrlp_cmd = 'CtrlPMixed' "'CtrlP'
-"let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlPMixed' "'CtrlP'
+let g:ctrlp_working_path_mode = 'ra'
 
 "easymotion options
 map <Leader> <Plug>(easymotion-prefix)
 
-" unicode symbols
+" no separation for airline (visually acceptable even without airline font)
 let g:airline_left_sep = ''
 let g:airline_right_sep = ''

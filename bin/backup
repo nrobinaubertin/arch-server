@@ -5,11 +5,13 @@
 # TODO
 # write usage
 # add error message on flock
+# erase trailing "/" in args
+# verify that /tmp/ is usable before using it (fallback to $HOME ?)
 
 # usage function (manual)
 function usage {
     echo ""
-    echo "usage"
+    echo "TODO : write usage function"
     echo ""
 }
 
@@ -109,11 +111,41 @@ function backup {
     fi
     echo "."
 
-    echo ""
-    date
-    rsync -a -e "ssh -p ${port}" --bwlimit="${speed}" --progress -h --stats "${source_dir}" "${user}"@"${domain}":"${target_dir}"
-    date
-    echo ""
+    # Here is a trick to make rsync work with renamed/moved files
+    # The trick was first showed here : https://lincolnloop.com/blog/detecting-file-moves-renames-rsync/
+    # It was then enhanced (with only rsync) here : https://github.com/dparoli/hrsync/blob/master/hrsync
+
+    # The idea is to notice that, when fed with --no-in-recursive, rsync starts by copying all hard links.
+    # Using that, we make a shadow (a memory) of the tree of files in a directory using hardlinks.
+    # When rsync transfers the hardlinks, the same tree is used and rsync only verify that everything is there.
+    # That finished, he starts to transfer the rest. But the rest is hardlinking to the same files, so he transfers them only as hardlinks.
+    # (they are all hardlinks but he believes that the shadow/memory are the initials hardlinks)
+
+    # create the shadow if there none
+    # --link-dest is used to only transfer hardlinks (making the work of cp -rlp)
+    if [ ! -d "${source_dir}/${shadow}" ] 
+    then
+        rsync -a --delete --link-dest="${source_dir}" --exclude="/${shadow}" "${source_dir}" "${source_dir}/${shadow}"
+    fi
+
+    # do the real synchronization, that is, to the remote location (with the shadow/memory)
+    rsync -axhHP -e "ssh -p ${port}" --bwlimit="${speed}" --stats --no-inc-recursive --numeric-ids --delete-after "${source_dir}" /tmp/shadow.backup "${user}"@"${domain}":"${target_dir}"
+
+    # get the status of the last rsync
+    status=$?
+
+	# update memory only if the status is 0
+	# If it's not 0, then rsync was stopped before finishing and the last synchro shadow/memory should remain the same.
+    if [ $status -eq 0 ]
+    then
+
+        # update source shadow directory
+		# this way, next time we sync, we'll only sync differences with the actual tree
+        rsync -a --delete --link-dest="${source_dir}" --exclude="/${shadow}" "${source_dir}" "${source_dir}/${shadow}"
+
+        # update remote shadow directory : the command goes through ssh
+		ssh "${user}"@"${domain}" "rsync -a --delete --link-dest=${target_dir} --exclude=/${shadow} ${target}/ ${target}/${shadow}" 
+    fi
 }
 
 # prevent from running if rsync already is
