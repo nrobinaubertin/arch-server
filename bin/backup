@@ -5,15 +5,36 @@
 # TODO
 # write usage
 # add error message on flock
-# erase trailing "/" in args
-# verify that /tmp/ is usable before using it (fallback to $HOME ?)
+
+shadow=".shadow-rsync"
 
 # usage function (manual)
 function usage {
     echo ""
-    echo "TODO : write usage function"
+    echo "usage"
     echo ""
 }
+
+# courtesy of http://stackoverflow.com/questions/2172352/in-bash-how-can-i-check-if-a-string-begins-with-some-value#18558871
+function beginswith { 
+	case "$2" in 
+        "$1"*) echo "true";; 
+            *) echo "false";; 
+	esac
+}
+
+function absolute_path {
+
+    if [[ $(beginswith "/" "$1") == "true" ]]
+	then
+		echo "$1"
+	else
+		pushd $(dirname "$1") > /dev/null
+		echo "$(pwd -P)/$1"
+		popd > /dev/null
+	fi
+}
+
 
 # function used to collect arguments
 function args {
@@ -51,7 +72,8 @@ function args {
 
     if [[ -n $1 ]]
     then
-        source_dir="$1"
+        source_dir="${1%/}"
+        source_dir=$(absolute_path $source_dir) 
     else
         usage
         exit 0
@@ -60,6 +82,7 @@ function args {
     if [[ -n $2 ]] && [[ $(echo "$2" | grep -E "[^@:]+@[^@:]+:.*") != "" ]]
     then
         target_dir=$(echo "$2" | cut -d: -f2)
+        target_dir="${target_dir%/}"
         user=$(echo "$2" | cut -d@ -f1)
         domain=$(echo "$2" | cut -d: -f1 | cut -d@ -f2)
     else
@@ -111,41 +134,22 @@ function backup {
     fi
     echo "."
 
-    # Here is a trick to make rsync work with renamed/moved files
-    # The trick was first showed here : https://lincolnloop.com/blog/detecting-file-moves-renames-rsync/
-    # It was then enhanced (with only rsync) here : https://github.com/dparoli/hrsync/blob/master/hrsync
-
-    # The idea is to notice that, when fed with --no-in-recursive, rsync starts by copying all hard links.
-    # Using that, we make a shadow (a memory) of the tree of files in a directory using hardlinks.
-    # When rsync transfers the hardlinks, the same tree is used and rsync only verify that everything is there.
-    # That finished, he starts to transfer the rest. But the rest is hardlinking to the same files, so he transfers them only as hardlinks.
-    # (they are all hardlinks but he believes that the shadow/memory are the initials hardlinks)
-
-    # create the shadow if there none
-    # --link-dest is used to only transfer hardlinks (making the work of cp -rlp)
     if [ ! -d "${source_dir}/${shadow}" ] 
     then
-        rsync -a --delete --link-dest="${source_dir}" --exclude="/${shadow}" "${source_dir}" "${source_dir}/${shadow}"
+        rsync -a --delete --link-dest="${source_dir}" --exclude="/${shadow}" "${source_dir}/" "${source_dir}/${shadow}"
     fi
 
-    # do the real synchronization, that is, to the remote location (with the shadow/memory)
-    rsync -axhHP -e "ssh -p ${port}" --bwlimit="${speed}" --stats --no-inc-recursive --numeric-ids --delete-after "${source_dir}" /tmp/shadow.backup "${user}"@"${domain}":"${target_dir}"
+	rsync -axH -e "ssh -p ${port}" --bwlimit="${speed}" --no-inc-recursive --numeric-ids --delete-after "${source_dir}/" "${user}"@"${domain}":"${target_dir}"
 
-    # get the status of the last rsync
-    status=$?
+	status=$?
 
-	# update memory only if the status is 0
-	# If it's not 0, then rsync was stopped before finishing and the last synchro shadow/memory should remain the same.
-    if [ $status -eq 0 ]
-    then
+	if [ $status -eq 0 ]
+	then
+    
+		rsync -a --delete --link-dest="${source_dir}" --exclude="/${shadow}" "${source_dir}/" "${source_dir}/${shadow}"
+		ssh -p "${port}" "${user}"@"${domain}" rsync -a --delete --link-dest="${target_dir}" --exclude="/${shadow}" "${target_dir}/" "${target_dir}/${shadow}"
 
-        # update source shadow directory
-		# this way, next time we sync, we'll only sync differences with the actual tree
-        rsync -a --delete --link-dest="${source_dir}" --exclude="/${shadow}" "${source_dir}" "${source_dir}/${shadow}"
-
-        # update remote shadow directory : the command goes through ssh
-		ssh "${user}"@"${domain}" "rsync -a --delete --link-dest=${target_dir} --exclude=/${shadow} ${target}/ ${target}/${shadow}" 
-    fi
+	fi
 }
 
 # prevent from running if rsync already is
