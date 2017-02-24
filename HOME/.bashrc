@@ -2,13 +2,20 @@
 
 # some colors
 RCol='\033[0m'
-BRed='\033[1;31m'
-Blu='\033[0;34m'
-Gre='\033[0;32m'
-BRed='\033[1;31m';
 
-# prompt_style (inspired by the one from jason wryan)
-PS1="${RCol}┌─[\[${BRed}\]\t\[${RCol}\] \[${Blu}\]\h\[${RCol}\] \[${Gre}\]\w\[${RCol}\]]\n└─╼ "
+BRed='\033[1;31m'
+BWhi='\033[1;37m';
+
+Bla='\033[30m';
+Red='\033[31m';
+Gre='\033[32m';
+Yel='\033[33m';
+Blu='\033[34m';
+Pur='\033[35m';
+Cya='\033[36m';
+Whi='\033[37m';
+
+PS1="${RCol}┌─[\`if [ \$? = 0 ]; then echo "${Gre}"; else echo "${Red}"; fi\`\t\[${Rcol}\] \[${Blu}\]\h\[${RCol}\] \[${Yel}\]\w\[${RCol}\]]\n└─╼ "
 
 # attach/start tmux
 function start_tmux {
