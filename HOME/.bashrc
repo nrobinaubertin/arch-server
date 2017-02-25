@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # some colors
 RCol='\033[0m'
 
@@ -35,13 +33,29 @@ function start_tmux {
 # for server only
 #start_tmux
 
-# export variables
+# Automatically trim long paths in the prompt (requires Bash 4.x)
+export PROMPT_DIRTRIM=2
+
+# PATH
 export PATH="${PATH}:${HOME}/bin"
 #export PATH="${PATH}:${HOME}/.gem/ruby/2.4.0/bin"
+
 if [[ -n $(which nvim) ]]
 then
     export EDITOR="/usr/bin/nvim"
 fi
+
+# Perform file completion in a case insensitive fashion
+bind "set completion-ignore-case on"
+
+# Treat hyphens and underscores as equivalent
+bind "set completion-map-case on"
+
+# Display matches for ambiguous patterns at first tab press
+bind "set show-all-if-ambiguous on"
+
+# Immediately add a trailing slash when autocompleting symlinks to directories
+bind "set mark-symlinked-directories on"
 
 # set pager conf
 export LESS_TERMCAP_mb=$'\033[01;31m'
@@ -55,8 +69,27 @@ export LESS="-RI"
 
 # set history variables
 unset HISTFILESIZE
-HISTSIZE="10000"
-HISTCONTROL=ignoreboth:erasedups
+export HISTSIZE="10000"
+export HISTCONTROL=ignoreboth:erasedups
+export HISTIGNORE="&:[ ]*:exit:ls:bg:fg:history:clear:ll:cd:shutdown"
+export HISTTIMEFORMAT='%F %T '
+
+# Prepend cd to directory names automatically
+shopt -s autocd 2> /dev/null
+# Correct spelling errors during tab-completion
+shopt -s dirspell 2> /dev/null
+# Correct spelling errors in arguments supplied to cd
+shopt -s cdspell 2> /dev/null
+
+# CD quick targets
+CDPATH=".:~:/srv/http"
+
+# Enable incremental history search with up/down arrows (also Readline goodness)
+# Learn more about this here: http://codeinthehole.com/writing/the-most-important-command-line-tip-incremental-history-searching-with-inputrc/
+bind '"\e[A": history-search-backward'
+bind '"\e[B": history-search-forward'
+bind '"\e[C": forward-char'
+bind '"\e[D": backward-char'
 
 # some aliases
 alias cd..='cd ..'
