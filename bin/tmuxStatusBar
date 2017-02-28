@@ -11,12 +11,6 @@ then
     fi
 fi
 
-#batteryStatus=$(acpi -b | awk 'sub(/,/,"") {print $3, $4}' | sed -e "s/,//")
-#if [[ -z $batteryStatus ]]
-#then
-#	batteryStatus="unplugged"
-#fi
-
 currentTime=$(date +"%H:%M:%S")
 if [[ $1 == left ]]
 then

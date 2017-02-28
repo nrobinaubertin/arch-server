@@ -45,12 +45,6 @@ then
     export EDITOR="/usr/bin/nvim"
 fi
 
-# Perform file completion in a case insensitive fashion
-bind "set completion-ignore-case on"
-
-# Treat hyphens and underscores as equivalent
-bind "set completion-map-case on"
-
 # Display matches for ambiguous patterns at first tab press
 bind "set show-all-if-ambiguous on"
 
