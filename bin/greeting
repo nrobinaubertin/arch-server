@@ -103,6 +103,8 @@ myip=$(ip route show | tail -n1 | sed -r 's/.*src(.*)/\1/' | cut -d' ' -f2)
 echo -n "-"
 #mypackages=$(pacman -Qet | wc -l)
 #echo -n "-"
+myterm=$(echo $TERM)
+echo -n "-"
 
 # get uptime
 ups=$(cat /proc/uptime | cut -d. -f1)
@@ -115,6 +117,7 @@ if [ "$uph" != 0 ]; then upm=$(( $upm - $uph*60 )); fi
 if [ "$upd" != 0 ]; then uph=$(( $uph - $upd*24 )); fi
 if [ "$ups" -lt 10 ]; then ups=$( echo "0$ups"); fi
 if [ "$upm" -lt 10 ]; then upm=$( echo "0$upm"); fi
+if [ "$uph" -lt 10 ]; then uph=$( echo "0$uph"); fi
 
 if [ "$upd" != 0 ]
 then
@@ -181,11 +184,11 @@ echo -e "${Cya}
       _~ #..<..0.                 .J-.''..._f. ${BGre}Architecture:${RCol} ${arch}${Cya}
      .7..#_.. _f.                .....-..,'4'  ${BGre}Kernel:${RCol} ${mykernel}${Cya}
      ;' ,#j.  T'      ..         ..J....,'.j'  ${BGre}CPU:${RCol} ${mycpu}${Cya}
-    .' ..'^.,-0.,,,,yMMMMM,.    ,-.J...+'.j@   ${BGre}Memory:${RCol} ${mymem^}${Cya}
+    .' ..'^.,-0.,,,,yMMMMM,.    ,-.J...+'.j@   ${BGre}Memory:${RCol} ${mymem}${Cya}
    .'.'...' .yMMMMM0M@^='''g.. .'..J..'.'.jH   ${BGre}Uptime:${RCol} ${myuptime}${Cya}
-   j' .'1'  q'^)@@#'^'.''='BNg_...,]_)'...0-   ${BGre}Shell:${RCol} ${myshell^}${Cya}
-  .T ...I. j'    .'..+,_.'3#MMM0MggCBf....F.   ${BGre}IP:${RCol} ${myip}${Cya}
-  j/.+'.{..+       '^~'-^~~''''''''?'''''1'
+   j' .'1'  q'^)@@#'^'.''='BNg_...,]_)'...0-   ${BGre}Shell:${RCol} ${myshell}${Cya}
+  .T ...I. j'    .'..+,_.'3#MMM0MggCBf....F.   ${BGre}Terminal:${RCol} ${myterm}${Cya}
+  j/.+'.{..+       '^~'-^~~''''''''?'''''1'    ${BGre}IP:${RCol} ${myip}${Cya}
   .... .y.}                  '.._-:'_...jf     
   g-.  .Lg'                 ..,..'-....,'.
  .'.   .Y^                  .....',].._f

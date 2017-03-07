@@ -13,7 +13,7 @@ Pur='\033[35m';
 Cya='\033[36m';
 Whi='\033[37m';
 
-PS1="${RCol}┌─[\`if [ \$? = 0 ]; then echo "${Gre}"; else echo "${Red}"; fi\`\t\[${Rcol}\] \[${Blu}\]\h\[${RCol}\] \[${Yel}\]\w\[${RCol}\]]\n└─╼ "
+PS1="\r${RCol}┌─[\`if [ \$? = 0 ]; then echo "${Gre}"; else echo "${Red}"; fi\`\t\[${Rcol}\] \[${Blu}\]\h\[${RCol}\] \[${Yel}\]\w\[${RCol}\]]\n└─╼ "
 
 # attach/start tmux
 function start_tmux {
@@ -45,6 +45,12 @@ then
     export EDITOR="/usr/bin/nvim"
 fi
 
+# Perform file completion in a case insensitive fashion
+#bind "set completion-ignore-case on"
+
+# Treat hyphens and underscores as equivalent
+#bind "set completion-map-case on"
+
 # Display matches for ambiguous patterns at first tab press
 bind "set show-all-if-ambiguous on"
 
@@ -65,7 +71,7 @@ export LESS="-RI"
 unset HISTFILESIZE
 export HISTSIZE="10000"
 export HISTCONTROL=ignoreboth:erasedups
-export HISTIGNORE="&:[ ]*:exit:ls:bg:fg:history:clear:ll:cd:shutdown"
+export HISTIGNORE="fg:bg:&:[ \t]*:exit:ls*:history:clear:ll*:cd*:\[A*:man*:dfc:nvim:\:q:ww"
 export HISTTIMEFORMAT='%F %T '
 
 # Prepend cd to directory names automatically
@@ -91,7 +97,9 @@ alias :q='exit'
 alias cls='clear'
 if [[ -n $(which curl 2>/dev/null) ]]
 then
-    alias ww='curl -s wttr.in'
+    function ww {
+        curl -s "wttr.in/$1"
+    }
 fi
 if [[ -z $(which exa 2>/dev/null) ]]
 then
