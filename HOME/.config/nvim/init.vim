@@ -17,17 +17,25 @@ set tabstop=4
 set softtabstop=4
 set expandtab
 
+" Escape terminal mode
+:tnoremap <Esc> <C-\><C-n>
+
 "" Tabs commands
 noremap <C-k> :tabnext<CR>
 nnoremap <C-k> :tabnext<CR>
 inoremap <C-k> <Esc>:tabnext<CR>i
+tnoremap <C-k> <C-\><C-n>:tabnext<CR>i
 
 noremap <C-j> :tabprevious<CR>
 nnoremap <C-j> :tabprevious<CR>
 inoremap <C-j> <Esc>:tabprevious<CR>i
+tnoremap <C-j> <C-\><C-n>:tabprevious<CR>i
 
 " force writing with sudo
-cmap w!! %!sudo tee >/dev/null %
+cnoremap w!! %!sudo tee >/dev/null %
+
+" open terminal in a new tab
+command TabTer execute "tabnew | terminal"
 
 " keep cursor centered
 :nnoremap j jzz
@@ -42,7 +50,7 @@ call plug#begin('~/.config/nvim/plugged')
 " essentials
 
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle' }
 
 " visuals
 
@@ -81,8 +89,9 @@ autocmd FileType nerdtree noremap <buffer> <C-j> :tabprevious<CR>
 
 "ctrlp options
 let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlPMixed' "'CtrlP'
+let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
 
 "easymotion options
 map <Leader> <Plug>(easymotion-prefix)
@@ -90,3 +99,4 @@ map <Leader> <Plug>(easymotion-prefix)
 " no separation for airline (visually acceptable even without airline font)
 let g:airline_left_sep = ''
 let g:airline_right_sep = ''
+let g:airline_symbols_ascii = 1

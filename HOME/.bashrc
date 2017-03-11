@@ -13,7 +13,7 @@ Pur='\033[35m';
 Cya='\033[36m';
 Whi='\033[37m';
 
-PS1="\r${RCol}┌─[\`if [ \$? = 0 ]; then echo "${Gre}"; else echo "${Red}"; fi\`\t\[${Rcol}\] \[${Blu}\]\h\[${RCol}\] \[${Yel}\]\w\[${RCol}\]]\n└─╼ "
+PS1="\n\r${RCol}┌─[\`if [ \$? = 0 ]; then echo "${Gre}"; else echo "${Red}"; fi\`\t\[${Rcol}\] \[${Blu}\]\h\[${RCol}\] \[${Yel}\]\w\[${RCol}\]]\n└─╼ "
 
 # attach/start tmux
 function start_tmux {
@@ -38,7 +38,7 @@ export PROMPT_DIRTRIM=2
 
 # PATH
 export PATH="${PATH}:${HOME}/bin"
-#export PATH="${PATH}:${HOME}/.gem/ruby/2.4.0/bin"
+export PATH="${PATH}:${HOME}/.gem/ruby/2.4.0/bin"
 
 if [[ -n $(which nvim) ]]
 then
@@ -46,7 +46,7 @@ then
 fi
 
 # Perform file completion in a case insensitive fashion
-#bind "set completion-ignore-case on"
+bind "set completion-ignore-case on"
 
 # Treat hyphens and underscores as equivalent
 #bind "set completion-map-case on"
@@ -71,15 +71,15 @@ export LESS="-RI"
 unset HISTFILESIZE
 export HISTSIZE="10000"
 export HISTCONTROL=ignoreboth:erasedups
-export HISTIGNORE="fg:bg:&:[ \t]*:exit:ls*:history:clear:ll*:cd*:\[A*:man*:dfc:nvim:\:q:ww"
+export HISTIGNORE="fg:bg:&:[ ]*:exit:ls*:history:clear:ll*:cd*:\[A*:man[ ]*:dfc:nvim:\:q"
 export HISTTIMEFORMAT='%F %T '
 
 # Prepend cd to directory names automatically
-shopt -s autocd 2> /dev/null
+#shopt -s autocd 2> /dev/null
 # Correct spelling errors during tab-completion
-shopt -s dirspell 2> /dev/null
+#shopt -s dirspell 2> /dev/null
 # Correct spelling errors in arguments supplied to cd
-shopt -s cdspell 2> /dev/null
+#shopt -s cdspell 2> /dev/null
 
 # CD quick targets
 CDPATH=".:~:/srv/http"
