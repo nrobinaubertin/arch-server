@@ -1,17 +1,10 @@
 # some colors
 RCol='\033[0m'
 
-BRed='\033[1;31m'
-BWhi='\033[1;37m';
-
-Bla='\033[30m';
 Red='\033[31m';
 Gre='\033[32m';
 Yel='\033[33m';
 Blu='\033[34m';
-Pur='\033[35m';
-Cya='\033[36m';
-Whi='\033[37m';
 
 PS1="\n\r${RCol}┌─[\`if [ \$? = 0 ]; then echo "${Gre}"; else echo "${Red}"; fi\`\t\[${Rcol}\] \[${Blu}\]\h\[${RCol}\] \[${Yel}\]\w\[${RCol}\]]\n└─╼ "
 
@@ -38,18 +31,12 @@ export PROMPT_DIRTRIM=2
 
 # PATH
 export PATH="${PATH}:${HOME}/bin"
-export PATH="${PATH}:${HOME}/.gem/ruby/2.4.0/bin"
+#export PATH="${PATH}:${HOME}/.gem/ruby/2.4.0/bin"
 
 if [[ -n $(which nvim) ]]
 then
     export EDITOR="/usr/bin/nvim"
 fi
-
-# Perform file completion in a case insensitive fashion
-bind "set completion-ignore-case on"
-
-# Treat hyphens and underscores as equivalent
-#bind "set completion-map-case on"
 
 # Display matches for ambiguous patterns at first tab press
 bind "set show-all-if-ambiguous on"
@@ -73,16 +60,6 @@ export HISTSIZE="10000"
 export HISTCONTROL=ignoreboth:erasedups
 export HISTIGNORE="fg:bg:&:[ ]*:exit:ls*:history:clear:ll*:cd*:\[A*:man[ ]*:dfc:nvim:\:q"
 export HISTTIMEFORMAT='%F %T '
-
-# Prepend cd to directory names automatically
-#shopt -s autocd 2> /dev/null
-# Correct spelling errors during tab-completion
-#shopt -s dirspell 2> /dev/null
-# Correct spelling errors in arguments supplied to cd
-#shopt -s cdspell 2> /dev/null
-
-# CD quick targets
-CDPATH=".:~:/srv/http"
 
 # Enable incremental history search with up/down arrows (also Readline goodness)
 # Learn more about this here: http://codeinthehole.com/writing/the-most-important-command-line-tip-incremental-history-searching-with-inputrc/

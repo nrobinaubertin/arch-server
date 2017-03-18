@@ -103,19 +103,6 @@ ${Cya}                           .L..'..''.          ${RCol}
 "
 }
 
-# details
-machine=$(</proc/sys/kernel/hostname)
-arch=$(uname -m)
-mykernel=$(uname -r)
-mycpu=$(grep -m1 "model name" /proc/cpuinfo | cut -d':' -f2 | sed -r 's/(Intel\(R\)|CPU|@|\s+)/ /g' | sed -r 's/\s+/ /g' | sed -r 's/^\s+//')
-myshell=$(ps -p `ps -p $$ -o ppid=` | sed -n '2p' | sed -r 's/.*\s(.*)$/\1/')
-mymem=$(free -h --si | sed -n '2p' | sed -r 's/\s+/ /g' | cut -d' ' -f2)
-myip=$(ip route show | tail -n1 | sed -r 's/.*src(.*)/\1/' | cut -d' ' -f2)
-mypackages=$(pacman -Q | wc -l)
-myterm=$(echo $TERM)
-mycols=$(tput cols)
-mylines=$(tput lines)
-
 # get uptime
 function getUptime {
     ups=$(cat /proc/uptime | cut -d. -f1)
@@ -168,6 +155,23 @@ function printHeader {
 }
 
 function printInfos {
+
+    # details
+    machine=$(</proc/sys/kernel/hostname)
+    #arch=$(uname -m)
+    #mykernel=$(uname -r)
+    read arch mykernel <<<$(uname -mr)
+    mycpu=$(grep -m1 "model name" /proc/cpuinfo | awk -F": " '{print $2}')
+    #myshell=$(ps -p `ps -p $$ -o ppid=` | sed -n '2p' | sed -r 's/.*\s(.*)$/\1/')
+    myshell=$(echo $SHELL)
+    #mymem=$(free -h --si | sed -n '2p' | sed -r 's/\s+/ /g' | cut -d' ' -f2)
+    mymem=$(free -h --si | head -n2 | tail -n1 | awk '{print $2}')
+    myip=$(ip route show | tail -n1 | sed -r 's/.*src(.*)/\1/' | cut -d' ' -f2)
+    #mypackages=$(pacman -Q | wc -l)
+    myterm=$(echo $TERM)
+    mycols=$(tput cols)
+    mylines=$(tput lines)
+
     echo -e "${BGre}Machine:${RCol} ${machine}"
     echo -e "${BGre}Architecture:${RCol} ${arch}"
     echo -e "${BGre}Kernel:${RCol} ${mykernel}"
@@ -181,17 +185,17 @@ function printInfos {
         echo -e "${BGre}IP:${RCol} ${myip}"
     fi
     echo -e "${BGre}Geometry:${RCol} ${mycols}x${mylines}"
-    echo -e "${BGre}Packages:${RCol} ${mypackages}"
+    #echo -e "${BGre}Packages:${RCol} ${mypackages}"
 }
 
 function printFull {
-
-    printHeader
 
     j=1
     ascii_art=$(printAsciiArt)
     infos=$(printInfos)
     storage=$(printStorage)
+    
+    printHeader
 
     for i in {1..22}
     do
