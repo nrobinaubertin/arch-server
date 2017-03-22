@@ -17,6 +17,9 @@ set tabstop=4
 set softtabstop=4
 set expandtab
 
+"Remap leader Key
+let mapleader=","
+
 " Escape terminal mode
 :tnoremap <Esc> <C-\><C-n>
 
@@ -36,6 +39,7 @@ cnoremap w!! %!sudo tee >/dev/null %
 
 " open terminal in a new tab
 command TabTer execute "tabnew | terminal"
+map <Leader>t :TabTer<CR>
 
 " keep cursor centered
 :nnoremap j jzz
@@ -64,19 +68,19 @@ Plug 'cakebaker/scss-syntax.vim'
 
 " testing
 
-Plug 'easymotion/vim-easymotion'
 Plug 'https://github.com/ctrlpvim/ctrlp.vim'
+
+Plug 'francoiscabrol/ranger.vim'
+Plug 'rbgrouleff/bclose.vim'
 
 " disabled
 
 "Plug 'vim-airline/vim-airline-themes'
 "Plug 'Valloric/YouCompleteMe'
 "Plug 'vitalk/vim-simple-todo'
+"Plug 'easymotion/vim-easymotion'
 
 call plug#end()
-
-"Remap leader Key
-let mapleader=","
 
 "NERDTree options
 map <C-n> :NERDTreeToggle<CR>
@@ -94,9 +98,13 @@ let g:ctrlp_working_path_mode = 'ra'
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
 
 "easymotion options
-map <Leader> <Plug>(easymotion-prefix)
+"map <Leader> <Plug>(easymotion-prefix)
 
 " no separation for airline (visually acceptable even without airline font)
 let g:airline_left_sep = ''
 let g:airline_right_sep = ''
 let g:airline_symbols_ascii = 1
+
+" Ranger
+let g:ranger_map_keys = 0
+map <Leader>r :RangerNewTab<CR>
