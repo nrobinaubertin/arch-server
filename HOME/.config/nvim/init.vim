@@ -21,7 +21,7 @@ set expandtab
 let mapleader=","
 
 " Escape terminal mode
-:tnoremap <Esc> <C-\><C-n>
+tnoremap <Leader><Esc> <C-\><C-n>
 
 "" Tabs commands
 noremap <C-k> :tabnext<CR>
@@ -48,6 +48,9 @@ map <Leader>t :TabTer<CR>
 " space bar un-highlights search
 :noremap <silent> <Space> :silent noh<Bar>echo<CR>
 
+" update plugins
+command Update execute "PlugUpgrade | PlugUpdate"
+
 " vim-plug
 call plug#begin('~/.config/nvim/plugged')
 
@@ -72,6 +75,10 @@ Plug 'https://github.com/ctrlpvim/ctrlp.vim'
 
 Plug 'francoiscabrol/ranger.vim'
 Plug 'rbgrouleff/bclose.vim'
+
+"Plug 'vim-scripts/SearchComplete'
+Plug 'tpope/vim-fugitive'
+"Plug 'tpope/vim-abolish'
 
 " disabled
 
