@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ "$1" == "--full" ]]
+if [[ "$1" == "--full" ]] || [[ "$1" == "--install" ]]
 then
     # PACKAGES
     for x in $(cat package_list.txt); do sudo pacman --noconfirm -S $x; done
