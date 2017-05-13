@@ -2,21 +2,21 @@
 
 cpu=$(w | sed -n '1p' | sed 's/^.*average:\ \(.*\),.*,.*/\1/')
 latency=$(ping -c 1 -l 1 8.8.8.8 2>/dev/null | tail -n1 | awk '{print $4}' | tr '/' ' ' | cut -d'.' -f1)
-if (( $latency < 100 ))
+if [ "$latency" -lt 100 ]
 then
     latency=" $latency"
-    if (( $latency < 10 ))
+    if [ "$latency" -lt 10 ]
     then
         latency=" $latency"
     fi
 fi
 
 currentTime=$(date +"%H:%M:%S")
-if [[ $1 == left ]]
+if [ "$1" = left ]
 then
 	echo "${latency}ms | $cpu"
 fi
-if [[ $1 == right ]]
+if [ "$1" = right ]
 then
 	echo "$currentTime"
 fi

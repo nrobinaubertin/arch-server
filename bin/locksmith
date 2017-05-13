@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Script used to lock things (and to unlock them)
 
@@ -11,7 +11,7 @@ function usage {
 }
 
 function reqcheck {
-	if [[ -z `which tar 2>/dev/null` ]] && [[ -z `which gpg 2>/dev/null` ]] && [[ -z `which dirname 2>/dev/null` ]]
+    if [[ -z $(which tar 2>/dev/null) ]] && [[ -z $(which gpg 2>/dev/null) ]] && [[ -z $(which dirname 2>/dev/null) ]]
 	then
 		echo "You need to have dirname, tar and gpg in your PATH" 1>&2
 		exit 1
@@ -20,13 +20,13 @@ function reqcheck {
 
 function encrypt {
 	reqcheck
-	echo $1
+	echo "$1"
 	tar -zc "$1" | gpg -qc -o "$1.gpg"
 }
 
 function decrypt {
 	reqcheck
-	loc=`dirname "$1"`
+    loc=$(dirname "$1")
 	gpg -qd "$1" | tar -zxf "$loc" -
 }
 

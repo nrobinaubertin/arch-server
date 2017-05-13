@@ -28,13 +28,7 @@ fi
 
 if [[ "$1" == "--empty" ]]
 then
-    # erase all files older than one week in the trash (and not accessed)
-    ret=$(find "$HOME/.trash" -maxdepth 1 -atime +7 -exec rm -rf "{}" \; 2>&1)
-    if [[ -n $ret ]]
-    then
-        echo "Some files in the trash could not be deleted"
-    fi
-    exit 0
+    rm -rf "${HOME}/.trash"
 fi
 
 function sendToTrash {
@@ -54,7 +48,7 @@ function sendToTrash {
        exit 1
     fi
 
-    nounce=$(( $nounce + 1 ))
+    nounce=$(( nounce + 1 ))
     filename=${1%/}
     target="${filename##*/}.${nounce}.${timestamp}"
 

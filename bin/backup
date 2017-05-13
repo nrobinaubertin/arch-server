@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Script used to backup stuff using ssh and rsync
 
@@ -29,7 +29,7 @@ function absolute_path {
 	then
 		echo "$1"
 	else
-		pushd $(dirname "$1") > /dev/null
+		pushd "$(dirname "$1")" > /dev/null
 		echo "$(pwd -P)/$1"
 		popd > /dev/null
 	fi
@@ -73,7 +73,7 @@ function args {
     if [[ -n $1 ]]
     then
         source_dir="${1%/}"
-        source_dir=$(absolute_path $source_dir) 
+        source_dir=$(absolute_path "$source_dir") 
     else
         usage
         exit 0
