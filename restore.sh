@@ -19,12 +19,13 @@ fi
 
 if [[ "$1" == "--full" ]] || [[ "$1" == "--docker" ]]
 then
-    sudo pacman --noconfirm -S docker
+    sudo pacman --noconfirm -S docker docker-compose
+    sudo echo "{\n\"storage-driver\": \"overlay2\"\n}" > /etc/docker/daemon.json
     sudo systemctl enable docker
     sudo systemctl start docker
 
-    #TODO
-    # confirm using docker info
+    docker -v
+    docker-compose -v
 fi
 
 # bin
