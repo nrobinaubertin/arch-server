@@ -24,9 +24,6 @@ function start_tmux {
     fi
 }
 
-# for server only
-#start_tmux
-
 # Automatically trim long paths in the prompt (requires Bash 4.x)
 export PROMPT_DIRTRIM=2
 
@@ -79,6 +76,12 @@ alias nvim='nvim -p'
 alias tmux='tmux -2'
 alias todo='nvim ${HOME}/.TODO'
 
+if [[ -n $(which git 2>/dev/null) ]]
+then
+    alias gl='git log --pretty=medium --abbrev-commit --date=relative'
+    alias gs='git status -sb'
+fi
+
 if [[ -n $(which curl 2>/dev/null) ]]
 then
     function ww {
@@ -107,6 +110,15 @@ then
     alias ytmp3='youtube-dl --extract-audio --audio-quality 3 --audio-format mp3'
 fi
 
+# go to the root of the git repository
+function cdroot {
+    if ! [ -d ".git" ] && [ "$(pwd)" != "/" ]
+	then
+		cd ..
+		cdroot
+	fi
+}
+
 # completion with sudo
 complete -cf sudo
 
@@ -115,3 +127,5 @@ if [[ -n $(which greeting 2>/dev/null) ]]
 then
     greeting 2>/dev/null
 fi
+
+start_tmux
