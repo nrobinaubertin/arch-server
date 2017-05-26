@@ -3,21 +3,30 @@
 if [ "$1" = "power" ]
 then
     power="$(cat /sys/class/power_supply/BAT1/capacity)"
-    printf "%s%%" "${power}"
+    if [ -n "$power" ]
+    then
+        printf "%s%%" "${power}"
+    fi
     exit
 fi
 
 if [ "$1" = "time" ]
 then
     currentTime="$(date +"%H:%M")"
-    printf "%s" "$currentTime"
+    if [ -n "$currentTime" ]
+    then
+        printf "%s" "$currentTime"
+    fi
     exit
 fi
 
 if [ "$1" = "cpu" ]
 then
     cpu="$(awk '{ print $1 }' /proc/loadavg)"
-    printf "%s" "$cpu"
+    if [ -n "$cpu" ]
+    then
+        printf "%s" "$cpu"
+    fi
     exit
 fi
 
@@ -25,21 +34,38 @@ if [ "$1" = "latency" ]
 then
     latency="$(ping -c 1 -l 1 8.8.8.8 2>/dev/null | tail -n1 | awk '{print $4}' | tr '/' ' ' | cut -d'.' -f1)"
     #latency="$(ping -W 1 -c 3 -l 3 8.8.8.8 2>/dev/null | tail -n1 | awk '{print $4}' | tr '/' ' ' | cut -d' ' -f1)"
-    printf "%s" "${latency}ms"
+    if [ -n "$latency" ]
+    then
+        printf "%s" "${latency}ms"
+    fi
     exit
 fi
 
 if [ "$1" = "heat" ]
 then
     heat="$(awk '{ print $1/1000 }' /sys/class/thermal/thermal_zone0/temp)"
-    printf "%s" "${heat}°C"
+    if [ -n "$heat" ]
+    then
+        printf "%s" "${heat}°C"
+    fi
     exit
 fi
 
-if [ "$1" = "ip" ] && [ -n "$(which dig 2>/dev/null)" ]
+if [ "$1" = "ip" ]
 then
-    ip="$(dig +short +keepopen myip.opendns.com @resolver1.opendns.com)"
-    printf "%s" "$ip"
+    if [ -n "$(which dig 2>/dev/null)" ]
+    then
+        ip="$(dig +short +keepopen myip.opendns.com @resolver1.opendns.com)"
+    fi
+    if [ -z "$ip" ] && [ -n "$(which curl 2>/dev/null)" ]
+    then
+        ip="$(curl -s http://whatismyip.akamai.com/)"
+        #ip="$(curl -s https://4.ifcfg.me/)"
+    fi
+    if [ -n "$ip" ]
+    then
+        printf "%s" "$ip"
+    fi
     exit
 fi
 
@@ -58,12 +84,16 @@ then
     then
         if [ "$upd" -le 9 ]
         then
-            printf "%s day, %s:%s" "$upd" "$uph" "$upm"
+            uptime="${upd} day, ${uph}:${upm}"
         else
-            printf "%s days, %s:%s" "$upd" "$uph" "$upm"
+            uptime="${upd} days, ${uph}:${upm}"
         fi
     else
-        printf "%s:%s" "$uph" "$upm"
+        uptime="${uph}:${upm}"
+    fi
+    if [ -n "$uptime" ]
+    then
+        printf "%s" "$uptime"
     fi
     exit
 fi
