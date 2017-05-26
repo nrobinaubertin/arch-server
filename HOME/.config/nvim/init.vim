@@ -3,7 +3,6 @@ set nu
 set showcmd
 set ruler
 set mouse=
-set background=dark
 " show matching brackets
 set showmatch
 set mat=2
@@ -37,10 +36,6 @@ tnoremap <C-j> <C-\><C-n>:tabprevious<CR>i
 " force writing with sudo
 cnoremap w!! %!sudo tee >/dev/null %
 
-" open terminal in a new tab
-command TabTer execute "tabnew | terminal"
-map <Leader>t :TabTer<CR>
-
 " keep cursor centered
 :nnoremap j jzz
 :nnoremap k kzz
@@ -58,34 +53,18 @@ call plug#begin('~/.config/nvim/plugged')
 
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle' }
+Plug 'https://github.com/ctrlpvim/ctrlp.vim'
 
 " visuals
 
 Plug 'vim-airline/vim-airline'
+Plug 'morhetz/gruvbox'
 
 " syntax highlighting
 
 Plug 'leafgarland/typescript-vim'
 Plug 'lumiliet/vim-twig'
 Plug 'cakebaker/scss-syntax.vim'
-
-" testing
-
-Plug 'https://github.com/ctrlpvim/ctrlp.vim'
-
-Plug 'francoiscabrol/ranger.vim'
-Plug 'rbgrouleff/bclose.vim'
-
-"Plug 'vim-scripts/SearchComplete'
-Plug 'tpope/vim-fugitive'
-"Plug 'tpope/vim-abolish'
-
-" disabled
-
-"Plug 'vim-airline/vim-airline-themes'
-"Plug 'Valloric/YouCompleteMe'
-"Plug 'vitalk/vim-simple-todo'
-"Plug 'easymotion/vim-easymotion'
 
 call plug#end()
 
@@ -104,14 +83,14 @@ let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_working_path_mode = 'ra'
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
 
-"easymotion options
-"map <Leader> <Plug>(easymotion-prefix)
-
 " no separation for airline (visually acceptable even without airline font)
 let g:airline_left_sep = ''
 let g:airline_right_sep = ''
 let g:airline_symbols_ascii = 1
 
-" Ranger
-let g:ranger_map_keys = 0
-map <Leader>r :RangerNewTab<CR>
+" some styling
+set background=dark
+set fillchars=vert:\ ,stl:\ ,stlnc:\ 
+set laststatus=2
+set noshowmode
+colors gruvbox
