@@ -11,4 +11,4 @@
 ignoregrp="base base-devel"
 ignorepkg=""
 
-comm -23 <(pacman -Qqt | sort) <(echo $ignorepkg | tr ' ' '\n' | cat <(pacman -Sqg $ignoregrp) - | sort -u)
+comm -23 <(pacman -Qqt | sort) <(echo $ignorepkg | tr ' ' '\n' | cat <(pacman -Sqg "$ignoregrp") - | sort -u)

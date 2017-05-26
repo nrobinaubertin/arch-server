@@ -1,12 +1,12 @@
-#!/bin/bash
+#!/bin/sh
 
-if [[ "$1" == "--full" ]] || [[ "$1" == "--install" ]]
+if [ "$1" = "--full" ] || [ "$1" = "--install" ]
 then
     # PACKAGES
-    for x in $(cat package_list.txt); do sudo pacman --noconfirm -S $x; done
+    for x in $(cat package_list.txt); do sudo pacman --noconfirm -S "$x"; done
 fi
 
-if [[ "$1" == "--full" ]] || [[ "$1" == "--ssh" ]]
+if [ "$1" = "--full" ] || [ "$1" = "--ssh" ]
 then
     sudo pacman --noconfirm -S openssh
     sudo systemctl enable sshd.socket
@@ -17,10 +17,10 @@ then
     echo ""
 fi
 
-if [[ "$1" == "--full" ]] || [[ "$1" == "--docker" ]]
+if [ "$1" = "--full" ] || [ "$1" = "--docker" ]
 then
     sudo pacman --noconfirm -S docker docker-compose
-    sudo echo "{\n\"storage-driver\": \"overlay2\"\n}" > /etc/docker/daemon.json
+    sudo echo "{\n\"storage-driver\": \"overlay2\"\n}" | sudo tee /etc/docker/daemon.json
     sudo systemctl enable docker
     sudo systemctl start docker
 
@@ -29,10 +29,10 @@ then
 fi
 
 # bin
-mkdir -p $HOME/bin
-cp -t $HOME/bin bin/*
+mkdir -p "$HOME/bin"
+cp -t "$HOME/bin" bin/*
 
 # dotFiles
-cp -r -f -t $HOME/ HOME/.config
-cp -t $HOME/ HOME/.bashrc
-cp -t $HOME/ HOME/.tmux.conf
+cp -r -f -t "$HOME/" HOME/.config
+cp -t "$HOME/" HOME/.bashrc
+cp -t "$HOME/" HOME/.tmux.conf
