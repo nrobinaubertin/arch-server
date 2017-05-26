@@ -1,9 +1,7 @@
 #!/bin/bash
 
-set -xe
-
 yesorno() {
-    printf "%s\n" "$1"
+    printf "%s: " "$1"
     if [ "$2" = "yes" ]
     then
         case "$(read -r c && echo "$c")" in 
@@ -42,18 +40,16 @@ while true; do
 done
 
 choose_param "timezone" "Europe/Paris" "TIMEZONE"
+
 # TODO: propose a list of filesystems to choose from
 #choose_param "filesystem" "ext4" "FILESYSTEM"
 
-fdisk -l
-echo "Select a disk to install on (e.g. /dev/sda)"
-read -r DISK
-# TODO: check response
+echo ""
+lsblk -f
+echo ""
 
-echo "Enter size for root partition. Remainder of hard drive will be home partition (e.g. 50G, 20M, 30%"
-read -r SIZE
-# TODO: check response
-
+choose_param "disk to install on" "/dev/sda" "DISK"
+choose_param "root partition size" "25G" "SIZE"
 yesorno "Do you want wifi ? (Y/n)" "yes" "WIFI"
 
 # Update system clock
@@ -107,13 +103,14 @@ echo "${ACCOUNT_NAME}-arch" > /mnt/etc/hostname
 
 if [ "$WIFI" ]
 then
-    arch-chroot /mnt pacman -S iw wpa_supplicant dialog
+    arch-chroot /mnt pacman --noconfirm -S iw wpa_supplicant dialog
 fi
 
 # Lock root account and prepare user account
 arch-chroot /mnt passwd -l root
 arch-chroot /mnt useradd -m -g wheel -s /bin/bash "$ACCOUNT_NAME"
-arch-chroot /mnt echo "$ACCOUNT_NAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+echo "$ACCOUNT_NAME ALL=(ALL) NOPASSWD:ALL" >> /mnt/etc/sudoers
+echo "$ACCOUNT_NAME:$PASSWORD" | arch-chroot /mnt chpasswd
 
 # Write master boot record
 arch-chroot /mnt grub-install --target=i386-pc --recheck "$DISK"
@@ -123,6 +120,7 @@ arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 # "Unmount the disks"
 umount -R /mnt
 
+echo ""
 echo "Type any key to reboot..."
 read -rs -n1
 reboot
