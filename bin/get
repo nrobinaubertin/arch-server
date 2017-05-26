@@ -1,0 +1,75 @@
+#!/bin/sh
+
+if [ "$1" = "power" ]
+then
+    power="$(cat /sys/class/power_supply/BAT1/capacity)"
+    printf "%s%%" "${power}"
+    exit
+fi
+
+if [ "$1" = "time" ]
+then
+    currentTime="$(date +"%H:%M")"
+    printf "%s" "$currentTime"
+    exit
+fi
+
+if [ "$1" = "cpu" ]
+then
+    cpu="$(awk '{ print $1 }' /proc/loadavg)"
+    printf "%s" "$cpu"
+    exit
+fi
+
+if [ "$1" = "latency" ]
+then
+    latency="$(ping -c 1 -l 1 8.8.8.8 2>/dev/null | tail -n1 | awk '{print $4}' | tr '/' ' ' | cut -d'.' -f1)"
+    #latency="$(ping -W 1 -c 3 -l 3 8.8.8.8 2>/dev/null | tail -n1 | awk '{print $4}' | tr '/' ' ' | cut -d' ' -f1)"
+    printf "%s" "${latency}ms"
+    exit
+fi
+
+if [ "$1" = "heat" ]
+then
+    heat="$(awk '{ print $1/1000 }' /sys/class/thermal/thermal_zone0/temp)"
+    printf "%s" "${heat}°C"
+    exit
+fi
+
+if [ "$1" = "ip" ] && [ -n "$(which dig 2>/dev/null)" ]
+then
+    ip="$(dig +short +keepopen myip.opendns.com @resolver1.opendns.com)"
+    printf "%s" "$ip"
+    exit
+fi
+
+if [ "$1" = "uptime" ]
+then
+    ups=$(cut -d. -f1 < /proc/uptime)
+    upm=$(( ups / 60 ))
+    uph=$(( upm / 60 ))
+    upd=$(( uph / 24 ))
+    if [ "$uph" != 0 ]; then upm=$(( upm - uph*60 )); fi
+    if [ "$upd" != 0 ]; then uph=$(( uph - upd*24 )); fi
+    if [ "$upm" -lt 10 ]; then upm="0$upm"; fi
+    if [ "$uph" -lt 10 ]; then uph="0$uph"; fi
+
+    if [ "$upd" != 0 ]
+    then
+        if [ "$upd" -le 9 ]
+        then
+            printf "%s day, %s:%s" "$upd" "$uph" "$upm"
+        else
+            printf "%s days, %s:%s" "$upd" "$uph" "$upm"
+        fi
+    else
+        printf "%s:%s" "$uph" "$upm"
+    fi
+    exit
+fi
+
+if [ "$1" = "dot" ]
+then
+    printf "\xE2\x80\xA2"
+    exit
+fi
