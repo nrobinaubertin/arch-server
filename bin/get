@@ -6,6 +6,9 @@ then
     if [ -n "$power" ]
     then
         printf "%s%%" "${power}"
+    else
+        printf "AC\xE2\x9A\xA1DC"
+        #printf "AC/DC"
     fi
     exit
 fi
