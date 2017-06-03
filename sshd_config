@@ -1,0 +1,73 @@
+# Guidelines used: https://wiki.mozilla.org/Security/Guidelines/OpenSSH
+# man page online: https://linux.die.net/man/5/sshd_config
+
+# The sshd port
+Port 7122
+
+# We only suport Protocol 2
+Protocol 2
+
+# HostKeys for protocol version 2
+# Supported HostKey algorithms by order of preference.
+HostKey /etc/ssh/ssh_host_ed25519_key
+HostKey /etc/ssh/ssh_host_rsa_key
+HostKey /etc/ssh/ssh_host_ecdsa_key
+
+#Gives the facility code that is used when logging messages from sshd
+SyslogFacility AUTH
+LogLevel INFO
+
+# Authentication:
+LoginGraceTime 120
+PermitRootLogin no
+StrictModes yes
+MaxAuthTries 6
+MaxSessions 10
+PubkeyAuthentication yes
+HostbasedAuthentication no
+IgnoreUserKnownHosts no
+PasswordAuthentication no
+PermitEmptyPasswords no
+ChallengeResponseAuthentication no
+KerberosAuthentication no
+GSSAPIAuthentication no
+UsePAM no
+
+# The default is to check both .ssh/authorized_keys and .ssh/authorized_keys2
+# but this is overridden so installations will only check .ssh/authorized_keys
+AuthorizedKeysFile  /etc/ssh/authorized_keys/%u
+
+# Saying "no" does not improve security
+AllowAgentForwarding yes
+AllowTcpForwarding yes
+
+GatewayPorts no
+X11Forwarding no
+PrintMotd no
+PrintLastLog yes
+TCPKeepAlive yes
+UseLogin no
+UsePrivilegeSeparation yes
+PermitUserEnvironment no
+Compression delayed
+ClientAliveInterval 30
+ClientAliveCountMax 3
+UseDNS yes
+
+#PidFile /run/sshd.pid
+MaxStartups 10
+PermitTunnel no
+#ChrootDirectory none
+#Banner none
+
+### SFTP options
+
+# override default of no subsystems
+Subsystem	sftp	/usr/lib/ssh/sftp-server
+
+Match User sftponly
+  ChrootDirectory %h
+  ForceCommand internal-sftp
+  AllowTcpForwarding no
+  PermitTunnel no
+  X11Forwarding no
