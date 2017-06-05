@@ -55,6 +55,11 @@ Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle' }
 Plug 'https://github.com/ctrlpvim/ctrlp.vim'
 
+" async passiv
+
+Plug 'airblade/vim-gitgutter'
+Plug 'w0rp/ale'
+
 " visuals
 
 Plug 'vim-airline/vim-airline'
@@ -65,6 +70,13 @@ Plug 'morhetz/gruvbox'
 Plug 'leafgarland/typescript-vim'
 Plug 'lumiliet/vim-twig'
 Plug 'cakebaker/scss-syntax.vim'
+
+" testing
+
+Plug 'tpope/vim-fugitive'
+Plug 'junegunn/gv.vim'
+Plug 'yuttie/comfortable-motion.vim'
+Plug 'vim-utils/vim-man'
 
 call plug#end()
 
