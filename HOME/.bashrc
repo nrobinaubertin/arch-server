@@ -125,7 +125,7 @@ fi
 
 if [[ -n $(which mpv 2>/dev/null) ]]
 then
-    alias play='mpv --no-video --loop '
+    alias play='mpv --no-video --loop-playlist '
 fi
 
 if [[ -n $(which youtube-dl 2>/dev/null) ]]
@@ -147,10 +147,10 @@ complete -cf sudo
 
 gruvbox
 
+start_tmux
+
 # Greetings
 if [[ -n $(which greeting 2>/dev/null) ]]
 then
     greeting 2>/dev/null
 fi
-
-start_tmux
