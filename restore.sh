@@ -36,3 +36,4 @@ cp -t "$HOME/bin" bin/*
 cp -r -f -t "$HOME/" HOME/.config
 cp -t "$HOME/" HOME/.bashrc
 cp -t "$HOME/" HOME/.tmux.conf
+cp -t "$HOME/" HOME/.gitconfig
