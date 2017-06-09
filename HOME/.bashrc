@@ -47,6 +47,7 @@ gruvbox() {
     fi
 }
 
+
 # Automatically trim long paths in the prompt (requires Bash 4.x)
 export PROMPT_DIRTRIM=2
 
@@ -103,6 +104,15 @@ if [[ -n $(which git 2>/dev/null) ]]
 then
     alias gl='git log --pretty=medium --abbrev-commit --date=relative'
     alias gs='git status -sb'
+    alias gll='git log --graph --abbrev-commit --decorate --format=format:"%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)" --all'
+    if [[ -n $(which git-forest 2>/dev/null) ]]
+    then
+        alias gf='git-forest --all | less'
+    fi
+    if [[ -n $(which diff-so-fancy 2>/dev/null) ]]
+    then
+        alias gd='git diff --color | diff-so-fancy | less'
+    fi
 fi
 
 if [[ -n $(which curl 2>/dev/null) ]]
@@ -134,19 +144,18 @@ then
 fi
 
 # go to the root of the git repository
-function cdroot {
+cdroot() {
     if ! [ -d ".git" ] && [ "$(pwd)" != "/" ]
-	then
-		cd ..
-		cdroot
-	fi
+    then
+        cd ..
+        cdroot
+    fi
 }
 
 # completion with sudo
 complete -cf sudo
 
 gruvbox
-
 start_tmux
 
 # Greetings
