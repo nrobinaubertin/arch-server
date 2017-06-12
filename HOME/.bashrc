@@ -117,7 +117,7 @@ fi
 
 if [[ -n $(which curl 2>/dev/null) ]]
 then
-    function ww {
+    ww() {
         curl -s "wttr.in/$1"
     }
 fi
