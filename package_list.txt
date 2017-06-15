@@ -2,13 +2,16 @@ bind-tools
 dfc
 exfat-utils
 fcron
+glances
 gpg
 htop
 iftop
 neovim
 ntfs-3g
+python
 ranger
 tmux
 traceroute
 unzip
 wget
+ripgrep
