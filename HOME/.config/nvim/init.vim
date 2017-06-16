@@ -3,7 +3,7 @@ set nu
 set showcmd
 set ruler
 " do we still need to remove mouse support when using tmux ?
-set mouse=
+"set mouse=
 set showmatch
 set mat=2
 set novisualbell
