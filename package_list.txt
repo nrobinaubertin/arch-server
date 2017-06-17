@@ -10,8 +10,9 @@ neovim
 ntfs-3g
 python
 ranger
+ripgrep
 tmux
 traceroute
+trash-cli
 unzip
 wget
-ripgrep

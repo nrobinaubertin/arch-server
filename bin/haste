@@ -8,23 +8,22 @@
 haste - a CLI client for Haste server.
 
 Usage:
-    haste [-r] [-p PWD] [-]
-    haste [-r] [-p PWD] FILE
-    haste [-p PWD] get KEY
+    haste send [-r] [--password=<pwd>] [FILE]
+    haste get [--password=<pwd>] KEY
 
--               read from stdin.
-FILE            read from a file.
+Options:
+    -r --raw            Return a URL to the raw paste data.
+    --password=<pwd>    Encrypt/decrypt message using <pwd> as password.
+    -h --help           Show this message.
+    -v --version        Show version.
 
--h --help       show this message.
--r --raw        return a URL to the raw paste data.
--p --password   encrypt/decrypt message using this password.
-get             return message of a given key.
+If FILE is not specified, haste will read from standard input.
 """
 
 import os
 from base64 import b64decode, b64encode
 import json
-from sys import stdin
+import sys
 import docopt
 import requests
 from cryptography.hazmat.primitives import hashes
@@ -33,7 +32,8 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.backends import default_backend
 _BACKEND = default_backend()
 
-__version__ = '2.0.0'
+__version__ = '2.0.1'
+
 CONFIG = {
     'server_url': "https://paste.niels.fr",
     'timeout': 3
@@ -44,16 +44,17 @@ def main(**kwargs):
 
     if kwargs['KEY'] and kwargs['get']:
         data = get_snippet(kwargs['KEY'], CONFIG['server_url'], CONFIG['timeout'])
-        if kwargs['--password'] and kwargs['PWD']:
-            data = decrypt(kwargs['PWD'], json.loads(data)).decode("utf-8")
+        if kwargs['--password']:
+            data = decrypt(kwargs['--password'], json.loads(data)).decode("utf-8")
         print(data)
-    else:
-        filesrc = kwargs['FILE'] and kwargs['FILE'] != '-'
-        data = read_file(kwargs['FILE']) if filesrc else read_stdin()
-        if kwargs['--password'] and kwargs['PWD']:
-            data = json.dumps(encrypt(kwargs['PWD'], data))
+    elif kwargs['send']:
+        data = read_file(kwargs['FILE']) if kwargs['FILE'] else read_stdin()
+        if kwargs['--password']:
+            data = json.dumps(encrypt(kwargs['--password'], data))
         url = create_snippet(data, CONFIG['server_url'], CONFIG['timeout'], kwargs['--raw'])
         print(url)
+    else:
+        print(docopt.docopt(__doc__))
 
 def get_snippet(dockey, baseurl, timeout):
     """ get a snippet from the server """
@@ -81,7 +82,7 @@ def create_snippet(data, baseurl, timeout, raw):
 
 def read_stdin():
     """ joins lines of stdin into a single string """
-    return "".join(stdin.readlines()).strip()
+    return "".join(sys.stdin.readlines()).strip()
 
 def read_file(path):
     """ reads lines of a file and joins them into a single string """
@@ -132,7 +133,7 @@ def _kdf(keysize=128, iters=256000, salt=None):
     return kdf, kdf_salt
 
 def encrypt(pwd, plaintext, mode='gcm', keysize=128, tagsize=128, iters=256000):
-    """ Encrypt plain text using password. Outputs json usable by sjcl """
+    """ Encrypt plain text using password. Outputs json """
 
     ts = tagsize // 8
 

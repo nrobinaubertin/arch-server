@@ -33,7 +33,6 @@ source = None
 shutdown_event = None
 scheme = 'http'
 
-
 # Used for bound_interface
 socket_socket = socket.socket
 
@@ -356,7 +355,7 @@ def uploadSpeed(url, sizes, quiet=False):
         prod_thread.join(timeout=0.1)
     while cons_thread.isAlive():
         cons_thread.join(timeout=0.1)
-    return (sum(finished) / (timeit.default_timer() - start))
+    return sum(finished) / (timeit.default_timer() - start)
 
 
 def getAttributesByTagName(dom, tagName):
@@ -704,7 +703,7 @@ def speedtest():
 
     if not args.simple:
         print_(('Hosted by %(sponsor)s (%(name)s) [%(d)0.2f km]: '
-               '%(latency)s ms' % best).encode('utf-8', 'ignore'))
+                '%(latency)s ms' % best).encode('utf-8', 'ignore'))
     else:
         print_('Ping: %(latency)s ms' % best)
 

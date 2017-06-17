@@ -7,8 +7,7 @@ then
     then
         printf "%s%%" "${power}"
     else
-        printf "AC\xE2\x9A\xA1DC"
-        #printf "AC/DC"
+        printf "AC/DC"
     fi
     exit
 fi
@@ -35,8 +34,7 @@ fi
 
 if [ "$1" = "latency" ]
 then
-    latency="$(ping -c 1 -l 1 8.8.8.8 2>/dev/null | tail -n1 | awk '{print $4}' | tr '/' ' ' | cut -d'.' -f1)"
-    #latency="$(ping -W 1 -c 3 -l 3 8.8.8.8 2>/dev/null | tail -n1 | awk '{print $4}' | tr '/' ' ' | cut -d' ' -f1)"
+    latency="$(ping -W 1 -c 3 -l 3 8.8.8.8 2>/dev/null | tail -n1 | awk '{print $4}' | tr '/' ' ' | cut -d' ' -f1)"
     if [ -n "$latency" ]
     then
         printf "%s" "${latency}ms"
