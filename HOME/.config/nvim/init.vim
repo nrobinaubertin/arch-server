@@ -22,10 +22,6 @@ let mapleader=","
 " I need the 'Ç' sometimes...
 inoremap çç Ç
 
-" Escape terminal mode
-" TODO: rework this
-tnoremap <Leader><Esc> <C-\><C-n>
-
 "" Windows commands
 noremap <C-Up> :wincmd k<CR>
 inoremap <C-Up> <Esc>:wincmd k<CR>i
@@ -77,7 +73,7 @@ Plug 'tpope/vim-fugitive'
 
 " fzf TODO: switch to full blown fzf and enable it conditionally here
 " https://github.com/junegunn/fzf
-Plug 'junegunn/fzf', { 'dir': '~/.config/fzf', 'do': './install --all' }
+Plug 'junegunn/fzf', { 'on': 'FZF', 'dir': '~/.config/fzf', 'do': './install --all' }
 
 " syntax highlighting
 Plug 'leafgarland/typescript-vim'
