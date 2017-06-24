@@ -6,6 +6,12 @@ then
     for x in $(cat package_list.txt); do sudo pacman --noconfirm -S "$x"; done
 fi
 
+if [ "$1" = "--full" ] || [ "$1" = "--pip" ]
+then
+    # PIP
+    for x in $(cat pip_list.txt); do sudo pip install "$x"; done
+fi
+
 if [ "$1" = "--full" ] || [ "$1" = "--ssh" ]
 then
     sudo pacman --noconfirm -S openssh
