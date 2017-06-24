@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # some colors
 RCol='\033[0m'
@@ -52,12 +52,12 @@ gruvbox() {
 export PROMPT_DIRTRIM=2
 
 # PATH
-export PATH="${PATH}:${HOME}/bin"
-#export PATH="${PATH}:${HOME}/.gem/ruby/2.4.0/bin"
-#export PATH="${PATH}:${HOME}/.yarn/bin"
-#export PATH="${PATH}:${HOME}/.cargo/bin"
+[ -d "${HOME}/bin" ] && export PATH="${PATH}:${HOME}/bin"
+[ -d "${HOME}/.yarn/bin" ] && export PATH="${PATH}:${HOME}/.yarn/bin"
+[ -d "${HOME}/.cargo/bin" ] && export PATH="${PATH}:${HOME}/.cargo/bin"
+[ -f "${HOME}/.fzf.bash" ] && source "${HOME}/.fzf.bash"
 
-if [[ -n $(which nvim) ]]
+if [ -n "$(which nvim)" ]
 then
     export EDITOR="/usr/bin/nvim"
 fi
@@ -87,58 +87,72 @@ export HISTTIMEFORMAT='%F %T '
 
 # Enable incremental history search with up/down arrows (also Readline goodness)
 # Learn more about this here: http://codeinthehole.com/writing/the-most-important-command-line-tip-incremental-history-searching-with-inputrc/
-bind '"\e[A": history-search-backward'
-bind '"\e[B": history-search-forward'
-bind '"\e[C": forward-char'
-bind '"\e[D": backward-char'
+bind '"\033[A": history-search-backward'
+bind '"\033[B": history-search-forward'
+bind '"\033[C": forward-char'
+bind '"\033[D": backward-char'
 
 # some aliases
 alias cd..='cd ..'
 alias :q='exit'
 alias cls='clear'
-alias nvim='nvim -p'
 alias tmux='tmux -2'
 alias todo='nvim ${HOME}/.TODO'
 
-if [[ -n $(which git 2>/dev/null) ]]
+scan() {
+    find "$1" -type f -not -path '*/\.*' 2>/dev/null | awk -F . '{print $NF}' | grep -v "/" | sort | uniq -c | sort -t " " -k 1 -g -r
+}
+
+if [ -n "$(which git 2>/dev/null)" ]
 then
     alias gl='git log --pretty=medium --abbrev-commit --date=relative'
     alias gs='git status -sb'
-    alias gll='git log --graph --abbrev-commit --decorate --format=format:"%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)" --all'
-    if [[ -n $(which git-forest 2>/dev/null) ]]
+    if [ -n "$(which git-forest 2>/dev/null)" ]
     then
         alias gf='git-forest --all | less'
+    else
+        alias gf='git log --graph --abbrev-commit --decorate --format=format:"%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)" --all'
     fi
-    if [[ -n $(which diff-so-fancy 2>/dev/null) ]]
+    if [ -n "$(which diff-so-fancy 2>/dev/null)" ]
     then
-        alias gd='git diff --color | diff-so-fancy | less'
+        gd() {
+            if [ -z "$1" ]
+            then
+                target="."
+            else
+                target="$1"
+            fi
+            git diff --color "$target" | diff-so-fancy | less
+        }
+    else
+        alias gd='git diff --color'
     fi
 fi
 
-if [[ -n $(which curl 2>/dev/null) ]]
+if [ -n "$(which curl 2>/dev/null)" ]
 then
     ww() {
         curl -s "wttr.in/$1"
     }
 fi
 
-if [[ -z $(which exa 2>/dev/null) ]]
+if [ -n "$(which exa 2>/dev/null)" ]
 then
-    alias ll='ls -lhb --color'
-    alias lla='ls -alhb --color'
-    alias llt='ls -lhbt --color'
-else
     alias ll='exa -gl --git'
     alias lla='exa -agl --git'
     alias llt='exa -gl --git -s modified'
+else
+    alias ll='ls -lhb --color'
+    alias lla='ls -alhb --color'
+    alias llt='ls -lhbt --color'
 fi
 
-if [[ -n $(which mpv 2>/dev/null) ]]
+if [ -n "$(which mpv 2>/dev/null)" ]
 then
     alias play='mpv --no-video --loop-playlist '
 fi
 
-if [[ -n $(which youtube-dl 2>/dev/null) ]]
+if [ -n "$(which youtube-dl 2>/dev/null)" ]
 then
     alias ytmp3='youtube-dl --extract-audio --audio-quality 3 --audio-format mp3'
 fi
@@ -159,7 +173,7 @@ gruvbox
 start_tmux
 
 # Greetings
-if [[ -n $(which greeting 2>/dev/null) ]]
+if [ -n "$(which greeting 2>/dev/null)" ]
 then
     greeting 2>/dev/null
 fi

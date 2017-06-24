@@ -1,4 +1,0 @@
-#!/bin/sh
-
-# get extensions of files (to get statistics)
-find "$1" -type f -not -path '*/\.*' 2>/dev/null | awk -F . '{print $NF}' | grep -v "/" | sort | uniq -c | sort -t " " -k 1 -g -r
