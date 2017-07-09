@@ -13,6 +13,10 @@ set tabstop=4
 set softtabstop=4
 set expandtab
 
+" temporary fix for neovim 0.2
+" https://github.com/neovim/neovim/issues/6166
+set notimeout
+
 " ignore some files
 set wildignore+=*/.git/*,*/tmp/*,*.swp,*.orig
 
@@ -67,25 +71,25 @@ Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle' }
 Plug 'airblade/vim-gitgutter'
 Plug 'w0rp/ale'
-Plug 'vim-airline/vim-airline'
+Plug 'itchyny/lightline.vim'
 Plug 'morhetz/gruvbox'
+Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-fugitive'
 
 " fzf TODO: switch to full blown fzf and enable it conditionally here
 " https://github.com/junegunn/fzf
 Plug 'junegunn/fzf', { 'on': 'FZF', 'dir': '~/.config/fzf', 'do': './install --all' }
 
-" syntax highlighting
-Plug 'leafgarland/typescript-vim'
-Plug 'lumiliet/vim-twig'
-Plug 'cakebaker/scss-syntax.vim'
-
 " testing
 Plug 'junegunn/gv.vim'
+Plug 'kepbod/quick-scope'
 
 call plug#end()
 
-"NERDTree options
+" quick-scope
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+
+" NERDTree options
 map <C-n> :NERDTreeToggle<CR>
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
@@ -104,10 +108,8 @@ if executable('rg')
     let $FZF_DEFAULT_COMMAND = 'rg . --files --color=never --hidden --glob "!.git/*" 2>/dev/null'
 endif
 
-" no separation for airline (visually acceptable even without airline font)
-let g:airline_left_sep = ''
-let g:airline_right_sep = ''
-let g:airline_symbols_ascii = 1
+" lightline
+let g:lightline = {'colorscheme': 'gruvbox'}
 
 " some styling
 set background=dark
