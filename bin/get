@@ -14,7 +14,7 @@ fi
 
 if [ "$1" = "time" ]
 then
-    currentTime="$(date +"%H:%M")"
+    currentTime="$(date +"%R %Z")"
     if [ -n "$currentTime" ]
     then
         printf "%s" "$currentTime"
@@ -83,7 +83,7 @@ then
 
     if [ "$upd" != 0 ]
     then
-        if [ "$upd" -le 9 ]
+        if [ "$upd" -eq 1 ]
         then
             uptime="${upd} day, ${uph}:${upm}"
         else
