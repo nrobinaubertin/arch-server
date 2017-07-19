@@ -70,28 +70,43 @@ then
     exit
 fi
 
+if [ "$1" = "ram" ]
+then
+    kb=$(grep "MemAvailable" < /proc/meminfo | awk '{print $2}')
+    mb=$(( kb / 1000 ))
+    gb=$(( kb / 1000 / 1000 ))
+    if [ -n "$kb" ]
+    then
+        if [ "$gb" -gt 0 ]
+        then
+            r=$(( (mb - gb * 1000) / 100 ))
+            printf "%s.%s GB" "$gb" "$r";
+            exit
+        fi
+        if [ "$mb" -gt 0 ]
+        then
+            r=$(( (kb - mb * 1000) / 100 ))
+            printf "%s.%s MB" "$mb" "$r";
+            exit
+        fi
+        printf "%s KB" "$kb";
+    fi
+    exit
+fi
+
 if [ "$1" = "uptime" ]
 then
-    ups=$(cut -d. -f1 < /proc/uptime)
-    upm=$(( ups / 60 ))
-    uph=$(( upm / 60 ))
-    upd=$(( uph / 24 ))
-    if [ "$uph" != 0 ]; then upm=$(( upm - uph*60 )); fi
-    if [ "$upd" != 0 ]; then uph=$(( uph - upd*24 )); fi
-    if [ "$upm" -lt 10 ]; then upm="0$upm"; fi
-    if [ "$uph" -lt 10 ]; then uph="0$uph"; fi
-
-    if [ "$upd" != 0 ]
-    then
-        if [ "$upd" -eq 1 ]
-        then
-            uptime="${upd} day, ${uph}:${upm}"
-        else
-            uptime="${upd} days, ${uph}:${upm}"
-        fi
-    else
-        uptime="${uph}:${upm}"
-    fi
+    uptime=""
+    total_seconds=$(cut -d. -f1 < /proc/uptime)
+    days=$(( total_seconds / 60 / 60 / 24 ))
+    hours=$(( total_seconds / 60 / 60 % 24 ))
+    minutes=$(( total_seconds / 60 % 60 ))
+    #seconds=$(( total_seconds % 60 ))
+    (( days > 0 )) && uptime+="${days}d "
+    (( hours > 0 )) && uptime+="${hours}h "
+    uptime+="${minutes}m"
+    #(( minutes > 0 )) && uptime+="${minutes}m "
+    #uptime+="${seconds}s"
     if [ -n "$uptime" ]
     then
         printf "%s" "$uptime"
