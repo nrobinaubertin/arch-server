@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# do not continue if we are not in a bash shell
+[ -z "$BASH_VERSION" ] && return
+
+# do not continue if we are not running interactively
+[ -z "$PS1" ] && return
+
 # some colors
 RCol='\033[0m'
 Red='\033[31m';
@@ -7,6 +13,7 @@ Gre='\033[32m';
 Yel='\033[33m';
 Blu='\033[34m';
 
+# custom prompt
 PS1="\n\r${RCol}┌─[\`if [ \$? = 0 ]; then echo ${Gre}; else echo ${Red}; fi\`\t\[${RCol}\] \[${Blu}\]\h\[${RCol}\] \[${Yel}\]\w\[${RCol}\]]\n└─╼ "
 
 # attach/start tmux
@@ -24,6 +31,7 @@ start_tmux() {
     fi
 }
 
+# display gruvbox colors event in a tty
 gruvbox() {
     # if we are in a tty
     if [ "$TERM" = "linux" ]; then
@@ -47,9 +55,16 @@ gruvbox() {
     fi
 }
 
-
 # Automatically trim long paths in the prompt (requires Bash 4.x)
 export PROMPT_DIRTRIM=2
+
+# update $LINES and $COLUMNS after each command.
+# TESTING
+shopt -s checkwinsize
+
+# (bash 4+) enable recursive glob for grep, rsync, ls, ...
+#TESTING
+shopt -s globstar &> /dev/null
 
 # PATH
 [ -d "${HOME}/bin" ] && export PATH="${PATH}:${HOME}/bin"
@@ -68,6 +83,12 @@ bind "set show-all-if-ambiguous on"
 # Immediately add a trailing slash when autocompleting symlinks to directories
 bind "set mark-symlinked-directories on"
 
+# completion with sudo
+complete -cf sudo
+
+# open man in neovim
+command -v nvim > /dev/null 2>&1 && export MANPAGER="nvim '+set ft=man' -"
+
 # set pager conf
 export LESS_TERMCAP_mb=$'\033[01;31m'
 export LESS_TERMCAP_md=$'\033[01;33m'
@@ -82,7 +103,7 @@ export LESS="-RI"
 unset HISTFILESIZE
 export HISTSIZE="10000"
 export HISTCONTROL=ignoreboth:erasedups
-export HISTIGNORE="fg:bg:&:[ ]*:exit:ls:history:clear:ll:cd:\[A*:\:q"
+export HISTIGNORE="fg:bg:&:[ ]*:exit:ls:history:clear:ll:cd:\[A*"
 export HISTTIMEFORMAT='%F %T '
 
 # Enable incremental history search with up/down arrows (also Readline goodness)
@@ -94,15 +115,11 @@ bind '"\033[D": backward-char'
 
 # some aliases
 alias cd..='cd ..'
-alias :q='exit'
 alias cls='clear'
 alias tmux='tmux -2'
 alias todo='nvim ${HOME}/.TODO'
 
-scan() {
-    find "$1" -type f -not -path '*/\.*' 2>/dev/null | awk -F . '{print $NF}' | grep -v "/" | sort | uniq -c | sort -t " " -k 1 -g -r
-}
-
+# git aliases
 if [ -n "$(which git 2>/dev/null)" ]
 then
     alias gl='git log --pretty=medium --abbrev-commit --date=relative'
@@ -166,8 +183,35 @@ cdroot() {
     fi
 }
 
-# completion with sudo
-complete -cf sudo
+# change to parent directory matching partial string, eg:
+# in directory /home/foo/bar/baz, 'bd f' changes to /home/foo
+# TESTING
+function bd () {
+    local old_dir
+    old_dir=$(pwd)
+    local new_dir
+    new_dir="$(echo "$old_dir" | sed 's|\(.*/'"$1"'[^/]*/\).*|\1|')"
+    index="$(echo "$new_dir" | awk '{ print index($1,"/'"$1"'"); }')"
+    if [ "$index" -eq 0 ]
+    then
+        echo "No such occurrence."
+    else
+        echo "$new_dir"
+        cd "$new_dir" || exit
+    fi
+}
+
+# get number of files for each extension in a dir
+scan() {
+    find "$1" -type f -not -path '*/\.*' 2>/dev/null | awk -F . '{print $NF}' | grep -v "/" | sort | uniq -c | sort -t " " -k 1 -g -r
+}
+
+# get md5sum of directory
+md5dirsum() {
+    cd "$1" || exit
+    find . -type f -print0 | sort -z | uniq -z | xargs -0 -n 1 md5sum | sort | md5sum
+    cd - >/dev/null || exit
+}
 
 gruvbox
 start_tmux
