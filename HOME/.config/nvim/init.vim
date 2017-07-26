@@ -12,10 +12,12 @@ set shiftwidth=4
 set tabstop=4
 set softtabstop=4
 set expandtab
+set noshowmode
 
-" temporary fix for neovim 0.2
-" https://github.com/neovim/neovim/issues/6166
-set notimeout
+" some styling
+set background=dark
+set fillchars=vert:\ ,stl:\ ,stlnc:\ 
+set laststatus=2
 
 " ignore some files
 set wildignore+=*/.git/*,*/tmp/*,*.swp,*.orig
@@ -66,19 +68,17 @@ command Update execute "PlugUpgrade | PlugUpdate"
 " vim-plug
 call plug#begin('~/.config/nvim/plugged')
 
-" essentials
-Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle' }
-Plug 'airblade/vim-gitgutter'
-Plug 'w0rp/ale'
+"Plug 'airblade/vim-gitgutter'
 Plug 'itchyny/lightline.vim'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --key-bindings --completion --no-update-rc' }
+Plug 'junegunn/fzf.vim'
+Plug 'mhinz/vim-signify'
 Plug 'morhetz/gruvbox'
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-fugitive'
-
-" fzf TODO: switch to full blown fzf and enable it conditionally here
-" https://github.com/junegunn/fzf
-Plug 'junegunn/fzf', { 'on': 'FZF', 'dir': '~/.config/fzf', 'do': './install --all' }
+Plug 'w0rp/ale'
+Plug 'xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle' }
 
 " testing
 Plug 'junegunn/gv.vim'
@@ -101,7 +101,7 @@ autocmd FileType nerdtree noremap <buffer> <C-j> :tabprevious<CR>
 " fzf
 let $FZF_DEFAULT_COMMAND = 'find . 2>/dev/null'
 map <C-p> :FZF<CR>
-
+map <C-t> :FZF<CR>
 " if ripgrep is present
 if executable('rg')
     set grepprg=rg\ --vimgrep
@@ -111,10 +111,46 @@ endif
 " lightline
 let g:lightline = {'colorscheme': 'gruvbox'}
 
-" some styling
-set background=dark
-set fillchars=vert:\ ,stl:\ ,stlnc:\ 
-set laststatus=2
-set noshowmode
+" vim-signify
+let g:signify_vcs_list = [ 'git' ]
+let g:signify_sign_change = '~'
+
+" terminal colors; waiting for gruvbox patch to be merged :
+" https://github.com/morhetz/gruvbox/pull/93
+
+if has('nvim')
+    " dark0 + gray
+    let g:terminal_color_0 = "#282828"
+    let g:terminal_color_8 = "#928374"
+
+    " neurtral_red + bright_red
+    let g:terminal_color_1 = "#cc241d"
+    let g:terminal_color_9 = "#fb4934"
+
+    " neutral_green + bright_green
+    let g:terminal_color_2 = "#98971a"
+    let g:terminal_color_10 = "#b8bb26"
+
+    " neutral_yellow + bright_yellow
+    let g:terminal_color_3 = "#d79921"
+    let g:terminal_color_11 = "#fabd2f"
+
+    " neutral_blue + bright_blue
+    let g:terminal_color_4 = "#458588"
+    let g:terminal_color_12 = "#83a598"
+
+    " neutral_purple + bright_purple
+    let g:terminal_color_5 = "#b16286"
+    let g:terminal_color_13 = "#d3869b"
+
+    " neutral_aqua + faded_aqua
+    let g:terminal_color_6 = "#689d6a"
+    let g:terminal_color_14 = "#8ec07c"
+
+    " light4 + light1
+    let g:terminal_color_7 = "#a89984"
+    let g:terminal_color_15 = "#ebdbb2"
+endif
+
+"let g:gruvbox_terminal_colors = 1
 colors gruvbox
-set termguicolors
