@@ -1,7 +1,6 @@
 bind-tools
 dfc
 exfat-utils
-fcron
 gcc
 glances
 gpg
