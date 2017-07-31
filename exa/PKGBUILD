@@ -2,8 +2,8 @@
 # Maintainer Niels Robin-Aubertin
 
 pkgname="exa"
-pkgver="0.6.0"
-pkgrel=2
+pkgver="0.7.0"
+pkgrel=1
 pkgdesc='Replacement for ls written in Rust.'
 arch=('i686' 'x86_64')
 url="https://github.com/ogham/exa"
@@ -14,7 +14,7 @@ source=(
     "https://github.com/ogham/exa/archive/v${pkgver}.tar.gz"
 )
 md5sums=(
-    'a19e305d2dce7416503216e86b1276ce'
+    'f79572b1ceeb01ef322245e81eb82f5c'
 )
 
 package() {
