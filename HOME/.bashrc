@@ -58,12 +58,7 @@ gruvbox() {
 # Automatically trim long paths in the prompt (requires Bash 4.x)
 export PROMPT_DIRTRIM=2
 
-# update $LINES and $COLUMNS after each command.
-# TESTING
-shopt -s checkwinsize
-
 # (bash 4+) enable recursive glob for grep, rsync, ls, ...
-#TESTING
 shopt -s globstar &> /dev/null
 
 # PATH
@@ -76,12 +71,6 @@ if [ -n "$(which nvim)" ]
 then
     export EDITOR="/usr/bin/nvim"
 fi
-
-# Display matches for ambiguous patterns at first tab press
-bind "set show-all-if-ambiguous on"
-
-# Immediately add a trailing slash when autocompleting symlinks to directories
-bind "set mark-symlinked-directories on"
 
 # completion with sudo
 complete -cf sudo
@@ -115,6 +104,7 @@ bind '"\033[D": backward-char'
 
 # some aliases
 alias cd..='cd ..'
+alias :q='exit'
 alias cls='clear'
 alias tmux='tmux -2'
 alias todo='nvim ${HOME}/.TODO'
@@ -164,14 +154,14 @@ else
     alias llt='ls -lhbt --color'
 fi
 
-if [ -n "$(which mpv 2>/dev/null)" ]
-then
-    alias play='mpv --no-video --loop-playlist '
-fi
-
 if [ -n "$(which youtube-dl 2>/dev/null)" ]
 then
     alias ytmp3='youtube-dl --extract-audio --audio-quality 3 --audio-format mp3'
+fi
+
+if [ -n "$(which mpv 2>/dev/null)" ]
+then
+    alias play="mpv --no-video --loop-playlist"
 fi
 
 # go to the root of the git repository
@@ -180,24 +170,6 @@ cdroot() {
     then
         cd ..
         cdroot
-    fi
-}
-
-# change to parent directory matching partial string, eg:
-# in directory /home/foo/bar/baz, 'bd f' changes to /home/foo
-# TESTING
-function bd () {
-    local old_dir
-    old_dir=$(pwd)
-    local new_dir
-    new_dir="$(echo "$old_dir" | sed 's|\(.*/'"$1"'[^/]*/\).*|\1|')"
-    index="$(echo "$new_dir" | awk '{ print index($1,"/'"$1"'"); }')"
-    if [ "$index" -eq 0 ]
-    then
-        echo "No such occurrence."
-    else
-        echo "$new_dir"
-        cd "$new_dir" || exit
     fi
 }
 
