@@ -12,9 +12,19 @@ then
     exit
 fi
 
+if [ "$1" = "date" ]
+then
+    currentDate="$(date +"%F")"
+    if [ -n "$currentDate" ]
+    then
+        printf "%s" "$currentDate"
+    fi
+    exit
+fi
+
 if [ "$1" = "time" ]
 then
-    currentTime="$(date +"%R %Z")"
+    currentTime="$(date +"%R")"
     if [ -n "$currentTime" ]
     then
         printf "%s" "$currentTime"
@@ -34,7 +44,34 @@ fi
 
 if [ "$1" = "latency" ]
 then
-    latency="$(ping -W 1 -c 3 -l 3 8.8.8.8 2>/dev/null | tail -n1 | awk '{print $4}' | tr '/' ' ' | cut -d'.' -f1)"
+
+    # https://en.wikipedia.org/wiki/Open_Root_Server_Network
+    # https://www.iana.org/domains/root/servers
+
+    # Google
+    #latency="$(ping -W 1 -c 3 -l 3 8.8.8.8 2>/dev/null | tail -n1 | awk '{print $4}' | tr '/' ' ' | cut -d'.' -f1)"
+
+    # NASA (Ames Research Center)
+    #latency="$(ping -W 1 -c 3 -l 3 192.203.230.10 2>/dev/null | tail -n1 | awk '{print $4}' | tr '/' ' ' | cut -d'.' -f1)"
+
+    # First Colo GmbH, (Munich, Germany)
+    #latency="$(ping -W 1 -c 3 -l 3 212.224.71.116 2>/dev/null | tail -n1 | awk '{print $4}' | tr '/' ' ' | cut -d'.' -f1)"
+
+    # Netnod (Sweden)
+    #latency="$(ping -W 1 -c 3 -l 3 192.36.148.17 2>/dev/null | tail -n1 | awk '{print $4}' | tr '/' ' ' | cut -d'.' -f1)"
+
+    # ICANN (California, USA)
+    #latency="$(ping -W 1 -c 3 -l 3 199.7.83.42 2>/dev/null | tail -n1 | awk '{print $4}' | tr '/' ' ' | cut -d'.' -f1)"
+
+    # WIDE Project (Japan)
+    #latency="$(ping -W 1 -c 3 -l 3 202.12.27.33 2>/dev/null | tail -n1 | awk '{print $4}' | tr '/' ' ' | cut -d'.' -f1)"
+    
+    # ...
+    #latency="$(ping -W 1 -c 3 -l 3 4.2.2.2 2>/dev/null | tail -n1 | awk '{print $4}' | tr '/' ' ' | cut -d'.' -f1)"
+
+    # LDN (France)
+    latency="$(ping -W 1 -c 3 -l 3 80.67.188.188 2>/dev/null | tail -n1 | awk '{print $4}' | tr '/' ' ' | cut -d'.' -f1)"
+
     if [ -n "$latency" ]
     then
         printf "%s" "${latency}ms"
@@ -72,7 +109,13 @@ fi
 
 if [ "$1" = "ram" ]
 then
-    kb=$(grep "MemAvailable" < /proc/meminfo | awk '{print $2}')
+    mem_total=$(grep -E "^MemTotal:" < /proc/meminfo | awk '{print $2}')
+    mem_free=$(grep -E "^MemFree:" < /proc/meminfo | awk '{print $2}')
+    swap_free=$(grep -E "^SwapFree:" < /proc/meminfo | awk '{print $2}')
+    mem_buffers=$(grep -E "^Buffers:" < /proc/meminfo | awk '{print $2}')
+    mem_cached=$(grep -E "^Cached:" < /proc/meminfo | awk '{print $2}')
+    mem_reclaimable=$(grep -E "^SReclaimable:" < /proc/meminfo | awk '{print $2}')
+    kb=$(( mem_total - mem_free - swap_free - mem_buffers - mem_cached - mem_reclaimable ))
     mb=$(( kb / 1000 ))
     gb=$(( kb / 1000 / 1000 ))
     if [ -n "$kb" ]
@@ -101,12 +144,15 @@ then
     days=$(( total_seconds / 60 / 60 / 24 ))
     hours=$(( total_seconds / 60 / 60 % 24 ))
     minutes=$(( total_seconds / 60 % 60 ))
-    #seconds=$(( total_seconds % 60 ))
-    (( days > 0 )) && uptime+="${days}d "
-    (( hours > 0 )) && uptime+="${hours}h "
-    uptime+="${minutes}m"
-    #(( minutes > 0 )) && uptime+="${minutes}m "
-    #uptime+="${seconds}s"
+    if [ $days -gt 0 ]
+    then
+        uptime="${uptime}${days}d "
+    fi
+    if [ $hours -gt 0 ]
+    then
+        uptime="${uptime}${hours}h "
+    fi
+    uptime="${uptime}${minutes}m"
     if [ -n "$uptime" ]
     then
         printf "%s" "$uptime"

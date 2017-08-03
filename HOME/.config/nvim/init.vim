@@ -68,10 +68,10 @@ command Update execute "PlugUpgrade | PlugUpdate"
 " vim-plug
 call plug#begin('~/.config/nvim/plugged')
 
-"Plug 'airblade/vim-gitgutter'
 Plug 'itchyny/lightline.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --key-bindings --completion --no-update-rc' }
 Plug 'junegunn/fzf.vim'
+Plug 'junegunn/gv.vim'
 Plug 'mhinz/vim-signify'
 Plug 'morhetz/gruvbox'
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
@@ -79,10 +79,6 @@ Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-fugitive'
 Plug 'w0rp/ale'
 Plug 'xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle' }
-
-" testing
-Plug 'junegunn/gv.vim'
-Plug 'kepbod/quick-scope'
 
 call plug#end()
 
@@ -114,6 +110,7 @@ let g:lightline = {'colorscheme': 'gruvbox'}
 " vim-signify
 let g:signify_vcs_list = [ 'git' ]
 let g:signify_sign_change = '~'
+let g:signify_realtime = 1 
 
 " terminal colors; waiting for gruvbox patch to be merged :
 " https://github.com/morhetz/gruvbox/pull/93
