@@ -2,10 +2,10 @@ bind-tools
 dfc
 exfat-utils
 gcc
-glances
 gpg
 htop
 iftop
+iotop
 neovim
 ntfs-3g
 openssh
