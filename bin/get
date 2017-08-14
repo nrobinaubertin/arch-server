@@ -44,33 +44,15 @@ fi
 
 if [ "$1" = "latency" ]
 then
-
-    # https://en.wikipedia.org/wiki/Open_Root_Server_Network
-    # https://www.iana.org/domains/root/servers
-
-    # Google
-    #latency="$(ping -W 1 -c 3 -l 3 8.8.8.8 2>/dev/null | tail -n1 | awk '{print $4}' | tr '/' ' ' | cut -d'.' -f1)"
-
-    # NASA (Ames Research Center)
-    #latency="$(ping -W 1 -c 3 -l 3 192.203.230.10 2>/dev/null | tail -n1 | awk '{print $4}' | tr '/' ' ' | cut -d'.' -f1)"
-
-    # First Colo GmbH, (Munich, Germany)
-    #latency="$(ping -W 1 -c 3 -l 3 212.224.71.116 2>/dev/null | tail -n1 | awk '{print $4}' | tr '/' ' ' | cut -d'.' -f1)"
-
-    # Netnod (Sweden)
-    #latency="$(ping -W 1 -c 3 -l 3 192.36.148.17 2>/dev/null | tail -n1 | awk '{print $4}' | tr '/' ' ' | cut -d'.' -f1)"
-
-    # ICANN (California, USA)
-    #latency="$(ping -W 1 -c 3 -l 3 199.7.83.42 2>/dev/null | tail -n1 | awk '{print $4}' | tr '/' ' ' | cut -d'.' -f1)"
-
-    # WIDE Project (Japan)
-    #latency="$(ping -W 1 -c 3 -l 3 202.12.27.33 2>/dev/null | tail -n1 | awk '{print $4}' | tr '/' ' ' | cut -d'.' -f1)"
     
-    # ...
-    #latency="$(ping -W 1 -c 3 -l 3 4.2.2.2 2>/dev/null | tail -n1 | awk '{print $4}' | tr '/' ' ' | cut -d'.' -f1)"
-
     # LDN (France)
     latency="$(ping -W 1 -c 3 -l 3 80.67.188.188 2>/dev/null | tail -n1 | awk '{print $4}' | tr '/' ' ' | cut -d'.' -f1)"
+
+    if [ -n "$latency" ]
+    then
+        # DNS.WATCH (Germany)
+        latency="$(ping -W 1 -c 3 -l 3 84.200.70.40 2>/dev/null | tail -n1 | awk '{print $4}' | tr '/' ' ' | cut -d'.' -f1)"
+    fi
 
     if [ -n "$latency" ]
     then
@@ -110,29 +92,24 @@ fi
 if [ "$1" = "ram" ]
 then
     mem_total=$(grep -E "^MemTotal:" < /proc/meminfo | awk '{print $2}')
+    swap_total=$(grep -E "^SwapTotal:" < /proc/meminfo | awk '{print $2}')
     mem_free=$(grep -E "^MemFree:" < /proc/meminfo | awk '{print $2}')
     swap_free=$(grep -E "^SwapFree:" < /proc/meminfo | awk '{print $2}')
     mem_buffers=$(grep -E "^Buffers:" < /proc/meminfo | awk '{print $2}')
     mem_cached=$(grep -E "^Cached:" < /proc/meminfo | awk '{print $2}')
     mem_reclaimable=$(grep -E "^SReclaimable:" < /proc/meminfo | awk '{print $2}')
-    kb=$(( mem_total - mem_free - swap_free - mem_buffers - mem_cached - mem_reclaimable ))
-    mb=$(( kb / 1000 ))
-    gb=$(( kb / 1000 / 1000 ))
+    kb=$(( mem_total + swap_total - mem_free - swap_free - mem_buffers - mem_cached - mem_reclaimable ))
+    mb=$(( kb / 1024 ))
+    gb=$(( kb / 1024 / 1024 ))
     if [ -n "$kb" ]
     then
         if [ "$gb" -gt 0 ]
         then
-            r=$(( (mb - gb * 1000) / 100 ))
+            r=$(( (mb - gb * 1024) / 100 ))
             printf "%s.%s GB" "$gb" "$r";
             exit
         fi
-        if [ "$mb" -gt 0 ]
-        then
-            r=$(( (kb - mb * 1000) / 100 ))
-            printf "%s.%s MB" "$mb" "$r";
-            exit
-        fi
-        printf "%s KB" "$kb";
+        printf "%s MB" "$mb";
     fi
     exit
 fi
