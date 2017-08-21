@@ -114,6 +114,7 @@ if [ -n "$(which git 2>/dev/null)" ]
 then
     alias gl='git log --pretty=medium --abbrev-commit --date=relative'
     alias gs='git status -sb'
+
     if [ -n "$(which git-forest 2>/dev/null)" ]
     then
         alias gf='git-forest --all | less'
@@ -134,6 +135,11 @@ then
     else
         alias gd='git diff --color'
     fi
+fi
+
+if [ -n "$(which trash-put 2>/dev/null)" ]
+then
+    alias rr='trash-put'
 fi
 
 if [ -n "$(which curl 2>/dev/null)" ]
