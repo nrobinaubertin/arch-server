@@ -37,6 +37,14 @@ noremap <C-Right> :wincmd l<CR>
 inoremap <C-Right> <Esc>:wincmd l<CR>i
 tnoremap <C-Right> <C-\><C-n>:wincmd l<CR>i
 
+" resize windows
+nnoremap <silent> <Leader>> :exe "vertical resize " . (winwidth(0) * 3/2)<CR>
+inoremap <silent> <Leader>> :exe "vertical resize " . (winwidth(0) * 3/2)<CR>i
+tnoremap <silent> <Leader>> :exe "vertical resize " . (winwidth(0) * 3/2)<CR>i
+nnoremap <silent> <Leader>< :exe "vertical resize " . (winwidth(0) * 2/3)<CR>
+inoremap <silent> <Leader>< :exe "vertical resize " . (winwidth(0) * 2/3)<CR>i
+tnoremap <silent> <Leader>< :exe "vertical resize " . (winwidth(0) * 2/3)<CR>i
+
 "" Tabs commands
 noremap <C-k> :tabnext<CR>
 nnoremap <C-k> :tabnext<CR>
@@ -69,6 +77,8 @@ Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-fugitive'
 Plug 'w0rp/ale'
 Plug 'xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle' }
+
+Plug 'amadeus/vim-mjml'
 call plug#end()
 
 " NERDTree options
