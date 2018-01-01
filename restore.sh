@@ -6,12 +6,6 @@ then
     for x in $(cat package_list.txt); do sudo pacman --noconfirm -S "$x"; done
 fi
 
-if [ "$1" = "--full" ] || [ "$1" = "--pip" ]
-then
-    # PIP
-    for x in $(cat pip_list.txt); do sudo pip install "$x"; done
-fi
-
 if [ "$1" = "--full" ] || [ "$1" = "--ssh" ]
 then
     sudo pacman --noconfirm -S openssh
@@ -33,13 +27,3 @@ then
     docker -v
     docker-compose -v
 fi
-
-# bin
-mkdir -p "$HOME/bin"
-cp -t "$HOME/bin" bin/*
-
-# dotFiles
-cp -r -f -t "$HOME/" HOME/.config
-cp -t "$HOME/" HOME/.bashrc
-cp -t "$HOME/" HOME/.tmux.conf
-cp -t "$HOME/" HOME/.gitconfig

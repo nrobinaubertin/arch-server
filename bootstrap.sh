@@ -4,12 +4,12 @@ yesorno() {
     printf "%s: " "$1"
     if [ "$2" = "yes" ]
     then
-        case "$(read -r c && echo "$c")" in 
+        case "$(read -r c && echo "$c")" in
             [Yy]*|"") read -r "$3" <<< true;;
             *) read -r "$3" <<< false;;
         esac
     else
-        case "$(read -r c && echo "$c")" in 
+        case "$(read -r c && echo "$c")" in
             [Nn]*|"") read -r "$3" <<< true;;
             *) read -r "$3" <<< false;;
         esac
@@ -17,11 +17,11 @@ yesorno() {
 }
 
 choose_param() {
-    printf "The default %s is %s.\n" "$1" "$2" 
+    printf "The default %s is %s.\n" "$1" "$2"
     printf "Do you want to keep it ? (Y/n) "
-    case "$(read -r c && echo "$c")" in 
+    case "$(read -r c && echo "$c")" in
         [Yy]*|"") read -r "$3" <<< "$2";;
-        *) 
+        *)
             printf "Enter the wanted %s: " "$1"
             read -r "$3"
             ;;
