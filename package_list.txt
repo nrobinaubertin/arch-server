@@ -9,8 +9,6 @@ iotop
 neovim
 ntfs-3g
 openssh
-python
-python-pip
 ranger
 ripgrep
 tmux
