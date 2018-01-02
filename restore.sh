@@ -1,13 +1,18 @@
 #!/bin/sh
 
-if [ "$1" = "--full" ] || [ "$1" = "--install" ]
-then
-    # PACKAGES
-    for x in $(cat package_list.txt); do sudo pacman --noconfirm -S "$x"; done
+if [ "$1" = "--full" ] || [ "$1" = "--install" ]; then
+    while IFS= read -r LINE; do
+        sudo pacman --noconfirm -S "$LINE"
+    done < base_list.txt
 fi
 
-if [ "$1" = "--full" ] || [ "$1" = "--ssh" ]
-then
+if [ "$1" = "--full" ] || [ "$1" = "--utils" ]; then
+    while IFS= read -r LINE; do
+        sudo pacman --noconfirm -S "$LINE"
+    done < utils_list.txt
+fi
+
+if [ "$1" = "--full" ] || [ "$1" = "--ssh" ]; then
     sudo pacman --noconfirm -S openssh
     sudo systemctl enable sshd.socket
     sudo systemctl start sshd.socket
@@ -17,10 +22,9 @@ then
     echo ""
 fi
 
-if [ "$1" = "--full" ] || [ "$1" = "--docker" ]
-then
+if [ "$1" = "--full" ] || [ "$1" = "--docker" ]; then
     sudo pacman --noconfirm -S docker docker-compose
-    sudo echo "{\n\"storage-driver\": \"overlay2\"\n}" | sudo tee /etc/docker/daemon.json
+    sudo printf "{\\n\"storage-driver\": \"overlay2\"\\n}" | sudo tee /etc/docker/daemon.json
     sudo systemctl enable docker
     sudo systemctl start docker
 

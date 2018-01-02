@@ -1,0 +1,8 @@
+diff-so-fancy
+exa
+httpie
+jq
+ranger
+ripgrep
+speedtest-cli
+trash-cli

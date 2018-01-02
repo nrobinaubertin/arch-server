@@ -9,10 +9,7 @@ iotop
 neovim
 ntfs-3g
 openssh
-ranger
-ripgrep
 tmux
 traceroute
-trash-cli
 unzip
 wget
