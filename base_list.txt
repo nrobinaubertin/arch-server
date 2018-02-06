@@ -1,7 +1,6 @@
 bind-tools
 dfc
 exfat-utils
-gcc
 gpg
 htop
 iftop

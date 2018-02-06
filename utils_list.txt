@@ -1,7 +1,11 @@
+alsa-utils
 diff-so-fancy
 exa
 httpie
+iputils
+iw
 jq
+openbsd-netcat
 ranger
 ripgrep
 speedtest-cli
