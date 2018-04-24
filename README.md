@@ -1,6 +1,8 @@
 Arch-server
 ===========
 
+# /!\ I switched to gentoo recently. This repo is not updated anymore.
+
 These are my arch-server install files.
 I use them as a base for my client machines too.
 
